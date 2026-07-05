@@ -1,0 +1,18 @@
+:root {
+  color-scheme: light;
+  background: #f7f1e8;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: #f7f1e8;
+}
+
+img,
+svg {
+  display: block;
+}
