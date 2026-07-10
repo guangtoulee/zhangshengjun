@@ -408,7 +408,8 @@ export default function ZhangShengJunExperience() {
           src="/zhangshengjun/fanghu-hero.jpg"
           alt="云海、飞瀑与绝壁之间的永泰方壶岩母殿圣境"
           fill
-          priority
+          loading="eager"
+          fetchPriority="high"
           sizes="100vw"
           className={`${styles.heroImage} ${styles.parallaxBack}`}
         />
@@ -418,7 +419,7 @@ export default function ZhangShengJunExperience() {
           width={1400}
           height={520}
           className={`${styles.heroMist} ${styles.parallaxMid}`}
-          priority
+          loading="eager"
           aria-hidden="true"
         />
         <Image
@@ -427,7 +428,7 @@ export default function ZhangShengJunExperience() {
           width={360}
           height={980}
           className={`${styles.heroTalisman} ${styles.parallaxFront}`}
-          priority
+          loading="eager"
           aria-hidden="true"
         />
         <div className={styles.heroShade} />
@@ -616,7 +617,7 @@ export default function ZhangShengJunExperience() {
                       alt={chapter.alt}
                       fill
                       loading={index === 0 ? "eager" : "lazy"}
-                      sizes="100vw"
+                      sizes="(max-width: 720px) calc(100vw - 2rem), (max-width: 980px) calc(100vw - 3rem), 1px"
                     />
                   </div>
                   <span className={styles.legendStepNumber}>{chapter.number}</span>

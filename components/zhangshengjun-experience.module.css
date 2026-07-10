@@ -1163,6 +1163,7 @@
 }
 
 .legendMobileImage {
+  position: relative;
   display: none;
 }
 
