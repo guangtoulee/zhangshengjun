@@ -1,0 +1,72 @@
+{
+  "version": "1.0.0",
+  "title": "Zhang Shengjun Visual Reference Bible",
+  "purpose": "Reference authority for image and video generation",
+  "authorityOrder": [
+    "character identity",
+    "prop geometry",
+    "material language",
+    "environment and crowd composition"
+  ],
+  "globalRules": [
+    "The character lock board is the only authority for the adult deity identity.",
+    "The dharma rope is an inanimate woven hemp ritual rope, never a living snake.",
+    "The ritual sword remains a straight double-edged aged-bronze sword.",
+    "Incidental faces or statues in prop and environment images are non-authoritative.",
+    "Young Zhang Shengjun uses the woodcutter reference, not the adult deity face."
+  ],
+  "masters": [
+    {
+      "id": "character-lock",
+      "path": "/zhangshengjun/reference-bible/master-character-lock-board.jpg",
+      "authoritativeFor": ["adult face", "hair", "costume", "body proportions", "on-body prop scale"],
+      "neverUseFor": ["young woodcutter identity", "shot composition"]
+    },
+    {
+      "id": "prop-material",
+      "path": "/zhangshengjun/reference-bible/master-prop-material-board.jpg",
+      "authoritativeFor": ["ritual sword", "dharma rope", "costume materials", "rock materials"],
+      "neverUseFor": ["character identity", "shot composition"]
+    },
+    {
+      "id": "story-props",
+      "path": "/zhangshengjun/reference-bible/master-story-props-board.jpg",
+      "authoritativeFor": ["peach", "Go board", "woodcutter tools", "empty palanquin", "procession props", "rice terrace route"],
+      "neverUseFor": ["deity identity", "close-up face"]
+    }
+  ],
+  "generatedAssets": [
+    {
+      "id": "ritual-sword",
+      "path": "/zhangshengjun/reference-bible/generated/prop-ritual-sword-sheet.jpg",
+      "role": "prop geometry"
+    },
+    {
+      "id": "dharma-rope",
+      "path": "/zhangshengjun/reference-bible/generated/prop-dharma-rope-sheet.jpg",
+      "role": "prop geometry",
+      "constraint": "inanimate hemp rope"
+    },
+    {
+      "id": "costume-ornament",
+      "path": "/zhangshengjun/reference-bible/generated/costume-ornament-sheet.jpg",
+      "role": "costume construction"
+    },
+    {
+      "id": "fanghu-material",
+      "path": "/zhangshengjun/reference-bible/generated/material-fanghu-lacquer-rock-sheet.jpg",
+      "role": "material language"
+    },
+    {
+      "id": "peach-go-tools",
+      "path": "/zhangshengjun/reference-bible/generated/props-peach-go-tools-sheet.jpg",
+      "role": "story props"
+    },
+    {
+      "id": "field-procession-kit-v2",
+      "path": "/zhangshengjun/reference-bible/generated/props-field-procession-kit-v2.jpg",
+      "role": "empty palanquin and procession prop geometry",
+      "constraint": "empty shrine interior; add deity identity from character-lock board"
+    }
+  ]
+}
