@@ -1,0 +1,55 @@
+{
+  "version": "1.0.0",
+  "title": "法主降临：黑漆山骨中的千年神公",
+  "durationSeconds": 40.216,
+  "chapters": [
+    {
+      "index": 1,
+      "start": 0,
+      "title": "漆裂成山，法主显现",
+      "transitionOut": "法索擦镜"
+    },
+    {
+      "index": 2,
+      "start": 10.054,
+      "title": "法索擦镜，食桃悟道",
+      "transitionOut": "桃核化雷环"
+    },
+    {
+      "index": 3,
+      "start": 20.108,
+      "title": "雷环化剑，剑锋入水",
+      "transitionOut": "水纹化田"
+    },
+    {
+      "index": 4,
+      "start": 30.162,
+      "title": "水纹成田，万香归宗",
+      "transitionOut": "香路化朱砂裂隙"
+    }
+  ],
+  "outputs": {
+    "wide": {
+      "path": "/zhangshengjun/video/hero-cinematic-wide.mp4",
+      "width": 1280,
+      "height": 720,
+      "frameRate": 30,
+      "videoCodec": "H.264 High",
+      "audioCodec": "AAC 48kHz stereo"
+    },
+    "mobile": {
+      "path": "/zhangshengjun/video/hero-cinematic-mobile.mp4",
+      "width": 720,
+      "height": 1280,
+      "frameRate": 30,
+      "videoCodec": "H.264 High",
+      "audioCodec": "AAC 48kHz stereo"
+    }
+  },
+  "webBehavior": {
+    "hero": "autoplay muted loop playsinline",
+    "fullPlayer": "user initiated with controls and audio",
+    "reducedMotionFallback": "/zhangshengjun/mythic-lacquer-hero-v3.jpg",
+    "mobileBreakpoint": 720
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "media": [
+    {
+      "file": "public/zhangshengjun/video/hero-cinematic-mobile.mp4",
+      "duration": 40.22,
+      "has_48k": true,
+      "has_24bit": true
+    },
+    {
+      "file": "public/zhangshengjun/video/hero-cinematic-wide.mp4",
+      "duration": 40.22,
+      "has_48k": true,
+      "has_24bit": true
+    }
+  ],
+  "srt": [],
+  "duration_spread": 0.0,
+  "aligned": true,
+  "warnings": [],
+  "notes": [
+    "The film contains no dialogue or burned text, so no SRT is required.",
+    "No unintended black frames were detected at a duration threshold of 80 ms.",
+    "Audio sample peak is -2.3 dBFS and both outputs use the same 48 kHz stereo master."
+  ]
+}

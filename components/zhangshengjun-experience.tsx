@@ -21,11 +21,14 @@ import {
   Handshake,
   MapPin,
   Menu,
+  Pause,
+  Play,
   Route,
   ScrollText,
   Shield,
   Sparkles,
   Sprout,
+  X,
 } from "lucide-react";
 import styles from "./zhangshengjun-experience.module.css";
 
@@ -353,13 +356,20 @@ function MoreDetails({ children, label = "展开深读" }: { children: ReactNode
 
 export default function ZhangShengJunExperience() {
   const [heroActive, setHeroActive] = useState(0);
-  const [heroPaused, setHeroPaused] = useState(false);
+  const [heroPlaying, setHeroPlaying] = useState(false);
+  const [heroVideoReady, setHeroVideoReady] = useState(false);
+  const [heroInView, setHeroInView] = useState(true);
+  const [motionAllowed, setMotionAllowed] = useState(false);
+  const [filmOpen, setFilmOpen] = useState(false);
   const [originActive, setOriginActive] = useState(0);
   const [legendActive, setLegendActive] = useState(0);
   const [dharmaActive, setDharmaActive] = useState(0);
   const [networkActive, setNetworkActive] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [headerCompact, setHeaderCompact] = useState(false);
+  const heroVideoRef = useRef<HTMLVideoElement>(null);
+  const heroSectionRef = useRef<HTMLElement>(null);
+  const filmCloseRef = useRef<HTMLButtonElement>(null);
   const legendRefs = useRef<(HTMLElement | null)[]>([]);
   const mobileMenuRef = useRef<HTMLDetailsElement>(null);
 
@@ -384,12 +394,60 @@ export default function ZhangShengJunExperience() {
   }, []);
 
   useEffect(() => {
-    if (heroPaused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const timer = window.setInterval(() => {
-      setHeroActive((current) => (current + 1) % heroScenes.length);
-    }, 10000);
-    return () => window.clearInterval(timer);
-  }, [heroPaused]);
+    const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const connection = (
+      navigator as Navigator & { connection?: { saveData?: boolean } }
+    ).connection;
+    const updateMotionPreference = () => {
+      setMotionAllowed(!motionPreference.matches && !connection?.saveData);
+    };
+
+    updateMotionPreference();
+    motionPreference.addEventListener("change", updateMotionPreference);
+    return () => motionPreference.removeEventListener("change", updateMotionPreference);
+  }, []);
+
+  useEffect(() => {
+    const hero = heroSectionRef.current;
+    if (!hero) return;
+
+    const heroObserver = new IntersectionObserver(
+      ([entry]) => setHeroInView(entry.isIntersecting),
+      { threshold: 0.02 },
+    );
+    heroObserver.observe(hero);
+    return () => heroObserver.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!filmOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setFilmOpen(false);
+    };
+
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", closeOnEscape);
+    window.requestAnimationFrame(() => filmCloseRef.current?.focus());
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [filmOpen]);
+
+  useEffect(() => {
+    const video = heroVideoRef.current;
+    if (!video) return;
+
+    if (filmOpen || !motionAllowed || !heroInView) {
+      video.pause();
+      return;
+    }
+
+    void video.play().catch(() => setHeroPlaying(false));
+  }, [filmOpen, heroInView, motionAllowed]);
 
   useEffect(() => {
     const revealObserver = new IntersectionObserver(
@@ -430,12 +488,39 @@ export default function ZhangShengJunExperience() {
 
   const selectHeroScene = (index: number) => {
     setHeroActive(index);
-    setHeroPaused(true);
+    const video = heroVideoRef.current;
+    if (!video) return;
+
+    const chapterLength = Number.isFinite(video.duration) ? video.duration / heroScenes.length : 10.054;
+    video.currentTime = index * chapterLength;
+    void video.play().catch(() => setHeroPlaying(false));
   };
 
   const stepHeroScene = (direction: number) => {
-    setHeroActive((current) => (current + direction + heroScenes.length) % heroScenes.length);
-    setHeroPaused(true);
+    const next = (heroActive + direction + heroScenes.length) % heroScenes.length;
+    selectHeroScene(next);
+  };
+
+  const syncHeroChapter = () => {
+    const video = heroVideoRef.current;
+    if (!video || !Number.isFinite(video.duration) || video.duration <= 0) return;
+
+    const chapter = Math.min(
+      heroScenes.length - 1,
+      Math.floor(video.currentTime / (video.duration / heroScenes.length)),
+    );
+    setHeroActive(chapter);
+  };
+
+  const toggleHeroPlayback = () => {
+    const video = heroVideoRef.current;
+    if (!video) return;
+
+    if (video.paused) {
+      void video.play().catch(() => setHeroPlaying(false));
+    } else {
+      video.pause();
+    }
   };
 
   const heroScene = heroScenes[heroActive];
@@ -484,6 +569,7 @@ export default function ZhangShengJunExperience() {
       </header>
 
       <section
+        ref={heroSectionRef}
         className={`${styles.hero} ${styles.parallaxArea}`}
         id="home"
         onPointerMove={updateParallax}
@@ -520,6 +606,37 @@ export default function ZhangShengJunExperience() {
             </div>
           ))}
         </div>
+        {motionAllowed ? (
+          <div
+            className={`${styles.heroVideoLayer} ${styles.parallaxBack} ${
+              heroVideoReady ? styles.heroVideoLayerReady : ""
+            }`}
+            aria-hidden="true"
+          >
+            <video
+              ref={heroVideoRef}
+              className={styles.heroVideo}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              tabIndex={-1}
+              onCanPlay={() => setHeroVideoReady(true)}
+              onPlay={() => setHeroPlaying(true)}
+              onPause={() => setHeroPlaying(false)}
+              onTimeUpdate={syncHeroChapter}
+              onError={() => setHeroVideoReady(false)}
+            >
+              <source
+                src="/zhangshengjun/video/hero-cinematic-mobile.mp4"
+                type="video/mp4"
+                media="(max-width: 720px)"
+              />
+              <source src="/zhangshengjun/video/hero-cinematic-wide.mp4" type="video/mp4" />
+            </video>
+          </div>
+        ) : null}
         <Image
           src="/zhangshengjun/overlays/mist-layer.png"
           alt=""
@@ -565,7 +682,7 @@ export default function ZhangShengJunExperience() {
         <div className={styles.heroDirector} aria-label="首屏视觉章节">
           <div className={styles.heroDirectorHeader}>
             <div>
-              <span>MYTHIC MOTION STUDY</span>
+              <span>40S CINEMATIC MYTH</span>
               <strong>{heroScene.label}</strong>
             </div>
             <div className={styles.heroDirectorControls}>
@@ -573,6 +690,15 @@ export default function ZhangShengJunExperience() {
               <button type="button" onClick={() => stepHeroScene(-1)} aria-label="上一幕">
                 <ChevronLeft size={19} aria-hidden="true" />
               </button>
+              {motionAllowed ? (
+                <button
+                  type="button"
+                  onClick={toggleHeroPlayback}
+                  aria-label={heroPlaying ? "暂停主片" : "播放主片"}
+                >
+                  {heroPlaying ? <Pause size={17} aria-hidden="true" /> : <Play size={17} aria-hidden="true" />}
+                </button>
+              ) : null}
               <button type="button" onClick={() => stepHeroScene(1)} aria-label="下一幕">
                 <ChevronRight size={19} aria-hidden="true" />
               </button>
@@ -992,9 +1118,9 @@ export default function ZhangShengJunExperience() {
                 <span>神话影像系列 · 01</span>
                 <h3>法主降临：黑漆山骨中的千年神公</h3>
                 <p>以漆器、朱砂、法索与闽中山水建立全新视觉母版，再由连续十秒镜头扩展成可交互的首页片头。</p>
-                <button type="button" aria-label="法主降临影像正在筹备" disabled>
+                <button type="button" onClick={() => setFilmOpen(true)} aria-label="播放法主降临完整影像">
                   <CirclePlay size={19} aria-hidden="true" />
-                  影像筹备中
+                  播放 40 秒主片
                 </button>
               </div>
             </article>
@@ -1045,6 +1171,45 @@ export default function ZhangShengJunExperience() {
           </div>
         </div>
       </section>
+
+      {filmOpen ? (
+        <div
+          className={styles.filmModal}
+          role="dialog"
+          aria-modal="true"
+          aria-label="法主降临完整影像"
+          onMouseDown={(event) => {
+            if (event.currentTarget === event.target) setFilmOpen(false);
+          }}
+        >
+          <div className={styles.filmStage}>
+            <button
+              ref={filmCloseRef}
+              className={styles.filmClose}
+              type="button"
+              onClick={() => setFilmOpen(false)}
+              aria-label="关闭影像"
+            >
+              <X size={22} aria-hidden="true" />
+            </button>
+            <video
+              className={styles.filmPlayer}
+              autoPlay
+              controls
+              playsInline
+              preload="metadata"
+              poster="/zhangshengjun/mythic-lacquer-hero-v3.jpg"
+            >
+              <source
+                src="/zhangshengjun/video/hero-cinematic-mobile.mp4"
+                type="video/mp4"
+                media="(max-width: 720px)"
+              />
+              <source src="/zhangshengjun/video/hero-cinematic-wide.mp4" type="video/mp4" />
+            </video>
+          </div>
+        </div>
+      ) : null}
 
       <footer className={styles.footer}>
         <div className={styles.footerBrand}>
