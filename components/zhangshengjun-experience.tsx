@@ -12,7 +12,9 @@ import {
   ArrowDown,
   ArrowRight,
   BookOpenText,
+  ChevronLeft,
   ChevronDown,
+  ChevronRight,
   CirclePlay,
   Compass,
   Globe2,
@@ -40,6 +42,67 @@ const heroStats = [
   ["五大谱系", "圣迹景观"],
   ["50余座", "台湾主祀宫庙"],
   ["两岸四海", "香火网络"],
+];
+
+const heroScenes = [
+  {
+    number: "01",
+    label: "圣境方壶",
+    eyebrow: "THE SACRED ORIGIN · FANGHU ROCK",
+    title: "千年神公",
+    accent: "根在方壶",
+    text: "黑漆山骨、朱砂雷痕与一线飞瀑，共同托起张圣君信仰的血缘地与法源地。这里不是神话的背景，而是神话发生的山川本体。",
+    image: "/zhangshengjun/mythic-lacquer-hero-v3.jpg",
+    mobileImage: "/zhangshengjun/mythic-lacquer-hero-mobile-v3.jpg",
+    alt: "黑漆岩壁、朱砂雷痕与飞瀑之间的张圣君法主形象",
+    position: "center",
+    thumbPosition: "72% center",
+    mobilePosition: "center",
+    href: "#fanghu",
+    action: "进入方壶圣境",
+  },
+  {
+    number: "02",
+    label: "凡人入圣",
+    eyebrow: "FROM MORTAL TO DIVINE",
+    title: "生于山野",
+    accent: "志在苍生",
+    text: "从放牧、采薪和制作锄柄的贫寒少年，到急公好义、济困护民的法主公。千年香火的起点，是一个普通人的选择。",
+    image: "/zhangshengjun/woodcutter-origin-v2.jpg",
+    alt: "闽中山路上的青年樵夫张圣君",
+    position: "55% center",
+    thumbPosition: "44% center",
+    href: "#legend",
+    action: "追随成神之路",
+  },
+  {
+    number: "03",
+    label: "雷法镇邪",
+    eyebrow: "THE LUSHAN DHARMA MASTER",
+    title: "黑面仗剑",
+    accent: "五雷正法",
+    text: "披发、跣足、宝剑与麻蛇法索，把斩妖、祈雨、治疫与护境的神迹凝结为一尊极具力量的武身法相。",
+    image: "/zhangshengjun/dharma-iconography.jpg",
+    alt: "黑面披发、仗剑执法索的张圣君武身法相",
+    position: "52% center",
+    thumbPosition: "50% center",
+    href: "#heritage",
+    action: "解读法相密码",
+  },
+  {
+    number: "04",
+    label: "香火人间",
+    eyebrow: "A LIVING HERITAGE",
+    title: "神轿游田",
+    accent: "万香归宗",
+    text: "当神轿穿过村巷与田垄，信仰便从神殿回到日常生活；也由闽中山地跨越海峡，进入台湾与海外华人社群。",
+    image: "/zhangshengjun/ritual-procession.jpg",
+    alt: "张圣君神轿与信众巡行田垄的迎神游田仪式",
+    position: "center",
+    thumbPosition: "center",
+    href: "#global",
+    action: "沿香路走向四海",
+  },
 ];
 
 const originSites = [
@@ -289,6 +352,8 @@ function MoreDetails({ children, label = "展开深读" }: { children: ReactNode
 }
 
 export default function ZhangShengJunExperience() {
+  const [heroActive, setHeroActive] = useState(0);
+  const [heroPaused, setHeroPaused] = useState(false);
   const [originActive, setOriginActive] = useState(0);
   const [legendActive, setLegendActive] = useState(0);
   const [dharmaActive, setDharmaActive] = useState(0);
@@ -317,6 +382,14 @@ export default function ZhangShengJunExperience() {
       window.removeEventListener("scroll", updateScroll);
     };
   }, []);
+
+  useEffect(() => {
+    if (heroPaused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const timer = window.setInterval(() => {
+      setHeroActive((current) => (current + 1) % heroScenes.length);
+    }, 10000);
+    return () => window.clearInterval(timer);
+  }, [heroPaused]);
 
   useEffect(() => {
     const revealObserver = new IntersectionObserver(
@@ -354,6 +427,18 @@ export default function ZhangShengJunExperience() {
   const closeMobileMenu = () => {
     if (mobileMenuRef.current) mobileMenuRef.current.open = false;
   };
+
+  const selectHeroScene = (index: number) => {
+    setHeroActive(index);
+    setHeroPaused(true);
+  };
+
+  const stepHeroScene = (direction: number) => {
+    setHeroActive((current) => (current + direction + heroScenes.length) % heroScenes.length);
+    setHeroPaused(true);
+  };
+
+  const heroScene = heroScenes[heroActive];
 
   return (
     <main className={styles.shell}>
@@ -404,15 +489,37 @@ export default function ZhangShengJunExperience() {
         onPointerMove={updateParallax}
         onPointerLeave={resetParallax}
       >
-        <Image
-          src="/zhangshengjun/fanghu-hero.jpg"
-          alt="云海、飞瀑与绝壁之间的永泰方壶岩母殿圣境"
-          fill
-          loading="eager"
-          fetchPriority="high"
-          sizes="100vw"
-          className={`${styles.heroImage} ${styles.parallaxBack}`}
-        />
+        <div className={`${styles.heroSceneStack} ${styles.parallaxBack}`}>
+          {heroScenes.map((scene, index) => (
+            <div
+              className={`${styles.heroScene} ${index === heroActive ? styles.heroSceneActive : ""}`}
+              key={scene.number}
+              aria-hidden={index !== heroActive}
+            >
+              <Image
+                src={scene.image}
+                alt={index === heroActive ? scene.alt : ""}
+                fill
+                loading="eager"
+                fetchPriority={index === 0 ? "high" : undefined}
+                sizes={scene.mobileImage ? "(max-width: 720px) 1px, 106vw" : "106vw"}
+                className={scene.mobileImage ? styles.heroSceneDesktop : undefined}
+                style={{ objectPosition: scene.position }}
+              />
+              {scene.mobileImage ? (
+                <Image
+                  src={scene.mobileImage}
+                  alt=""
+                  fill
+                  loading="eager"
+                  sizes="(max-width: 720px) 104vw, 1px"
+                  className={styles.heroSceneMobile}
+                  style={{ objectPosition: scene.mobilePosition }}
+                />
+              ) : null}
+            </div>
+          ))}
+        </div>
         <Image
           src="/zhangshengjun/overlays/mist-layer.png"
           alt=""
@@ -422,58 +529,91 @@ export default function ZhangShengJunExperience() {
           loading="eager"
           aria-hidden="true"
         />
-        <Image
-          src="/zhangshengjun/overlays/talisman-column.png"
-          alt=""
-          width={360}
-          height={980}
-          className={`${styles.heroTalisman} ${styles.parallaxFront}`}
-          loading="eager"
-          aria-hidden="true"
-        />
+        <div className={`${styles.heroThunderArc} ${styles.parallaxFront}`} aria-hidden="true" />
         <div className={styles.heroShade} />
         <div className={styles.heroVertical} aria-hidden="true">
           THE SACRED ORIGIN · FUJIAN, CHINA
         </div>
 
-        <div className={`${styles.heroContent} ${styles.parallaxContent}`}>
+        <div
+          className={`${styles.heroContent} ${styles.parallaxContent}`}
+          key={heroScene.number}
+          aria-live="polite"
+        >
           <p className={styles.heroLocation}>
             <MapPin size={15} aria-hidden="true" />
             中国 · 福建 · 永泰
           </p>
-          <p className={styles.heroStrap}>千年神公，根在方壶</p>
+          <p className={styles.heroStrap}>{heroScene.eyebrow}</p>
           <h1>
-            永泰方壶岩
-            <span>张圣君母殿</span>
+            {heroScene.title}
+            <span>{heroScene.accent}</span>
           </h1>
-          <p className={styles.heroCopy}>
-            从闽中山野的凡人樵夫，到亦道亦佛的闾山法主；从护田祈雨，到跨越海峡与四海的共同香火。沿着圣迹，走近一位神明的诞生。
-          </p>
+          <p className={styles.heroCopy}>{heroScene.text}</p>
           <div className={styles.heroActions}>
-            <a className={styles.primaryAction} href="#fanghu">
-              开启溯源
+            <a className={styles.primaryAction} href={heroScene.href}>
+              {heroScene.action}
               <ArrowDown size={18} aria-hidden="true" />
             </a>
-            <a className={styles.secondaryAction} href="#legend">
-              进入神公传奇
-              <ArrowRight size={18} aria-hidden="true" />
+            <a className={styles.secondaryAction} href="#media">
+              <CirclePlay size={18} aria-hidden="true" />
+              进入法主视界
             </a>
           </div>
         </div>
 
-        <div className={styles.heroStats} aria-label="张圣君信仰概览">
-          {heroStats.map(([value, label]) => (
-            <div key={label}>
-              <strong>{value}</strong>
-              <span>{label}</span>
+        <div className={styles.heroDirector} aria-label="首屏视觉章节">
+          <div className={styles.heroDirectorHeader}>
+            <div>
+              <span>MYTHIC MOTION STUDY</span>
+              <strong>{heroScene.label}</strong>
             </div>
-          ))}
+            <div className={styles.heroDirectorControls}>
+              <span>{heroScene.number} / {String(heroScenes.length).padStart(2, "0")}</span>
+              <button type="button" onClick={() => stepHeroScene(-1)} aria-label="上一幕">
+                <ChevronLeft size={19} aria-hidden="true" />
+              </button>
+              <button type="button" onClick={() => stepHeroScene(1)} aria-label="下一幕">
+                <ChevronRight size={19} aria-hidden="true" />
+              </button>
+            </div>
+          </div>
+          <div className={styles.heroFilmstrip}>
+            {heroScenes.map((scene, index) => (
+              <button
+                type="button"
+                key={scene.number}
+                className={index === heroActive ? styles.heroFilmstripActive : ""}
+                onClick={() => selectHeroScene(index)}
+                aria-pressed={index === heroActive}
+                aria-label={`切换到${scene.label}`}
+              >
+                <span className={styles.heroThumbnail}>
+                  <Image
+                    src={scene.image}
+                    alt=""
+                    fill
+                    loading="eager"
+                    unoptimized={index === 0}
+                    sizes="132px"
+                    style={{ objectPosition: scene.thumbPosition }}
+                  />
+                </span>
+                <span>{scene.number}</span>
+                <strong>{scene.label}</strong>
+              </button>
+            ))}
+          </div>
         </div>
+      </section>
 
-        <a className={styles.scrollCue} href="#fanghu" aria-label="继续向下浏览">
-          <span />
-          SCROLL TO TRACE
-        </a>
+      <section className={styles.signalBand} aria-label="张圣君信仰概览">
+        {heroStats.map(([value, label]) => (
+          <div key={label}>
+            <strong>{value}</strong>
+            <span>{label}</span>
+          </div>
+        ))}
       </section>
 
       <section className={styles.origin} id="fanghu">
@@ -509,6 +649,7 @@ export default function ZhangShengJunExperience() {
                 width={1400}
                 height={520}
                 className={`${styles.originMist} ${styles.parallaxFront}`}
+                loading="eager"
                 aria-hidden="true"
               />
               <div className={styles.originRoute} aria-hidden="true" />
@@ -845,13 +986,13 @@ export default function ZhangShengJunExperience() {
 
           <div className={styles.mediaMosaic} data-reveal>
             <article className={styles.mediaFeature}>
-              <Image src="/zhangshengjun/peach-awakening.jpg" alt="食桃悟道短视频概念画面" fill sizes="(max-width: 980px) 100vw, 58vw" />
+              <Image src="/zhangshengjun/mythic-lacquer-hero-v3.jpg" alt="张圣君漆艺神话短片概念画面" fill sizes="(max-width: 980px) 100vw, 58vw" />
               <div className={styles.mediaShade} />
               <div>
-                <span>东方奇幻系列 · 01</span>
-                <h3>仙人对弈，食桃悟道</h3>
-                <p>以方壶岩实景、史料旁白与电影化重构，讲清凡人命运发生改变的一刻。</p>
-                <button type="button" aria-label="食桃悟道影像正在筹备" disabled>
+                <span>神话影像系列 · 01</span>
+                <h3>法主降临：黑漆山骨中的千年神公</h3>
+                <p>以漆器、朱砂、法索与闽中山水建立全新视觉母版，再由连续十秒镜头扩展成可交互的首页片头。</p>
+                <button type="button" aria-label="法主降临影像正在筹备" disabled>
                   <CirclePlay size={19} aria-hidden="true" />
                   影像筹备中
                 </button>
