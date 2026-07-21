@@ -18,6 +18,14 @@
   letter-spacing: 0;
 }
 
+.shellEnglish {
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.shellEnglish :is(p, a, button, summary, small, li) {
+  font-family: Inter, "Helvetica Neue", Arial, sans-serif;
+}
+
 .shell *,
 .shell *::before,
 .shell *::after {
@@ -110,7 +118,7 @@
   right: 0;
   min-height: 82px;
   display: grid;
-  grid-template-columns: minmax(290px, 1fr) auto minmax(140px, 0.45fr);
+  grid-template-columns: minmax(270px, 1fr) auto minmax(230px, 0.65fr);
   align-items: center;
   gap: 1.1rem;
   padding: 0 2.5rem;
@@ -255,6 +263,48 @@
   transform-origin: left;
 }
 
+.headerTools {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.languageSwitcher {
+  display: inline-grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  padding: 3px;
+  border: 1px solid rgba(255, 249, 237, 0.18);
+  border-radius: 4px;
+  background: rgba(3, 11, 8, 0.26);
+}
+
+.languageSwitcher a {
+  min-width: 31px;
+  min-height: 30px;
+  display: grid;
+  place-items: center;
+  padding: 0 0.4rem;
+  color: rgba(255, 249, 237, 0.58);
+  border-radius: 2px;
+  font-family: Inter, "Helvetica Neue", Arial, sans-serif;
+  font-size: 0.66rem;
+  font-weight: 800;
+  text-decoration: none;
+  transition:
+    color 180ms ease,
+    background-color 180ms ease;
+}
+
+.languageSwitcher a:hover {
+  color: #fff9ed;
+}
+
+.languageSwitcher a[aria-current="page"] {
+  color: #2b170d;
+  background: var(--gold-pale);
+}
+
 .headerAction {
   justify-self: end;
   min-height: 40px;
@@ -331,6 +381,63 @@
 
 .mobileMenu a:last-child {
   border-bottom: 0;
+}
+
+.mobileLocaleSwitcher {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.35rem;
+  padding: 0.7rem 0.45rem 0.25rem;
+}
+
+.mobileLocaleSwitcher a {
+  min-width: 0;
+  min-height: 40px;
+  justify-content: center;
+  padding: 0.5rem 0.35rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  color: rgba(255, 249, 237, 0.68);
+  font-size: 0.72rem;
+  text-align: center;
+}
+
+.mobileLocaleSwitcher a[aria-current="page"] {
+  color: #2b170d;
+  border-color: var(--gold-pale);
+  background: var(--gold-pale);
+}
+
+.shellEnglish .brandType strong {
+  font-size: 0.9rem;
+}
+
+.shellEnglish .brandType small {
+  font-size: 0.58rem;
+}
+
+.shellEnglish .nav a {
+  padding-right: 0.56rem;
+  padding-left: 0.56rem;
+  font-size: 0.76rem;
+}
+
+.shellEnglish .hero h1 {
+  max-width: 900px;
+  font-size: 4.75rem;
+}
+
+.shellEnglish .sectionHeading {
+  max-width: 980px;
+}
+
+.shellEnglish .sectionHeading h2,
+.shellEnglish .sectionHeading p {
+  max-width: 940px;
+}
+
+.shellEnglish .sectionHeading h2 {
+  font-size: 3rem;
 }
 
 .hero {
@@ -1078,7 +1185,7 @@
   top: -80px;
   right: -40px;
   color: rgba(139, 40, 28, 0.045);
-  content: "方壶";
+  content: attr(data-watermark);
   font-size: 18rem;
   line-height: 1;
   font-weight: 900;
@@ -2001,6 +2108,14 @@
   backdrop-filter: blur(16px);
 }
 
+.ritualRoute[data-reveal] {
+  transform: translateX(-50%) translateY(28px);
+}
+
+.ritualRoute[data-reveal][data-visible="true"] {
+  transform: translateX(-50%) translateY(0);
+}
+
 .ritualRoute::before {
   position: absolute;
   top: -1px;
@@ -2057,7 +2172,7 @@
   top: 6rem;
   right: -2rem;
   color: rgba(22, 61, 49, 0.045);
-  content: "香路";
+  content: attr(data-watermark);
   font-size: 17rem;
   line-height: 1;
   font-weight: 900;
@@ -2690,6 +2805,25 @@
   }
 }
 
+@media (max-width: 1360px) {
+  .shellEnglish .header {
+    grid-template-columns: 1fr auto;
+    min-height: 70px;
+    padding: 0 1.25rem;
+    background: rgba(10, 23, 18, 0.82);
+    backdrop-filter: blur(16px);
+  }
+
+  .shellEnglish .nav,
+  .shellEnglish .headerTools {
+    display: none;
+  }
+
+  .shellEnglish .mobileMenu {
+    display: block;
+  }
+}
+
 @media (max-width: 1180px) {
   .header {
     grid-template-columns: 1fr auto;
@@ -2700,7 +2834,7 @@
   }
 
   .nav,
-  .headerAction {
+  .headerTools {
     display: none;
   }
 
@@ -2745,6 +2879,10 @@
 
   .hero h1 {
     font-size: 4.1rem;
+  }
+
+  .shellEnglish .hero h1 {
+    font-size: 3.6rem;
   }
 
   .heroContent {
@@ -2909,6 +3047,13 @@
     inset: -2%;
   }
 
+  .parallaxBack,
+  .parallaxMid,
+  .parallaxFront,
+  .parallaxContent {
+    transform: none;
+  }
+
   .heroVideoLayer {
     inset: -2%;
   }
@@ -2952,6 +3097,14 @@
     max-width: 72%;
   }
 
+  .shellEnglish .heroContent > .heroLocation,
+  .shellEnglish .heroContent > .heroStrap,
+  .shellEnglish .heroContent > h1,
+  .shellEnglish .heroContent > .heroCopy,
+  .shellEnglish .heroContent > .heroActions {
+    max-width: 82%;
+  }
+
   .heroLocation {
     margin-bottom: 1.1rem;
   }
@@ -2964,6 +3117,11 @@
     max-width: 100%;
     font-size: 3.15rem;
     line-height: 1.06;
+  }
+
+  .shellEnglish .hero h1 {
+    font-size: 2.55rem;
+    line-height: 1.08;
   }
 
   .hero h1 span {
@@ -3079,6 +3237,21 @@
   .sectionHeading h2 {
     font-size: 2.2rem;
     line-height: 1.25;
+  }
+
+  .shellEnglish .sectionHeading h2 {
+    font-size: 2rem;
+    line-height: 1.22;
+  }
+
+  .shellEnglish .originNode {
+    max-width: 138px;
+    align-items: flex-start;
+    line-height: 1.25;
+  }
+
+  .shellEnglish .networkNode strong {
+    max-width: 128px;
   }
 
   .sectionHeading p {
@@ -3408,6 +3581,15 @@
 
   .hero h1 {
     font-size: 2.8rem;
+  }
+
+  .shellEnglish .brandType strong {
+    max-width: 190px;
+    font-size: 0.82rem;
+  }
+
+  .shellEnglish .hero h1 {
+    font-size: 2.25rem;
   }
 
   .heroLocation {

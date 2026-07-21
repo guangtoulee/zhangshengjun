@@ -3,6 +3,7 @@
 import Image from "next/image";
 import {
   useEffect,
+  useMemo,
   useRef,
   useState,
   type PointerEvent,
@@ -30,9 +31,16 @@ import {
   Sprout,
   X,
 } from "lucide-react";
+import {
+  localeInfo,
+  localizedLabel,
+  siteLocales,
+  translate,
+  type SiteLocale,
+} from "@/content/zhangshengjun-i18n";
 import styles from "./zhangshengjun-experience.module.css";
 
-const navItems = [
+const navItemsSource = [
   { label: "圣境方壶", href: "#fanghu" },
   { label: "千年神公", href: "#legend" },
   { label: "法相非遗", href: "#heritage" },
@@ -40,14 +48,14 @@ const navItems = [
   { label: "影音文库", href: "#media" },
 ];
 
-const heroStats = [
+const heroStatsSource = [
   ["千年+", "信仰传承"],
   ["五大谱系", "圣迹景观"],
   ["50余座", "台湾主祀宫庙"],
   ["两岸四海", "香火网络"],
 ];
 
-const heroScenes = [
+const heroScenesSource = [
   {
     number: "01",
     label: "圣境方壶",
@@ -108,7 +116,7 @@ const heroScenes = [
   },
 ];
 
-const originSites = [
+const originSitesSource = [
   {
     title: "方壶岩母殿",
     eyebrow: "信仰原点",
@@ -146,7 +154,7 @@ const originSites = [
   },
 ];
 
-const landscapeCategories = [
+const landscapeCategoriesSource = [
   ["01", "宗教场所", "庙宇、祖殿、故居与灵泉"],
   ["02", "学法修行", "仙桃坪、棋盘石与洞府"],
   ["03", "除妖济世", "斩蛇石、斗法石钉与剑痕"],
@@ -154,7 +162,7 @@ const landscapeCategories = [
   ["05", "仪式展演", "游田、庆诞与寻根进香"],
 ];
 
-const legendChapters = [
+const legendChaptersSource = [
   {
     number: "01",
     title: "凡尘起步",
@@ -201,7 +209,7 @@ const legendChapters = [
   },
 ];
 
-const dharmaFeatures = [
+const dharmaFeaturesSource = [
   {
     title: "黑面圆眼",
     short: "威慑",
@@ -234,14 +242,14 @@ const dharmaFeatures = [
   },
 ];
 
-const divineRoles = [
+const divineRolesSource = [
   { icon: Sprout, title: "农业保护", text: "祈雨、引水、游田、护禾" },
   { icon: Handshake, title: "商业信用", text: "果商、药商与大稻埕茶商" },
   { icon: Shield, title: "法术宗师", text: "闾山法宗、驱邪与护境" },
   { icon: Sparkles, title: "医药救助", text: "寻药治疫、济困安民" },
 ];
 
-const networkNodes = [
+const networkNodesSource = [
   {
     place: "方壶岩母殿",
     meta: "永泰 · 原点",
@@ -280,19 +288,40 @@ const networkNodes = [
   },
 ];
 
-const archiveSources = [
+const archiveSourcesSource = [
   ["宋代笔记", "《游宦纪闻》", "遇仙食桃、预言祸福等早期叙事线索"],
   ["宋代志怪", "《夷坚志》", "仙缘、绝粒与异人形象的文本参照"],
   ["地方志书", "《三山志》", "张道人及其地方信仰的制度化记忆"],
   ["道坛抄本", "《张圣君履历咒》", "生卒、法脉与科仪身份的另一套叙事"],
 ];
 
-const ritualSteps = [
+const ritualStepsSource = [
   ["01", "请神出殿", "科仪开启"],
   ["02", "巡行村落", "连接家户"],
   ["03", "神轿游田", "祈丰护禾"],
   ["04", "回銮安座", "共同体重聚"],
 ];
+
+function localizeRecords<T extends Record<string, unknown>>(items: T[], locale: SiteLocale) {
+  return items.map((item) =>
+    Object.fromEntries(
+      Object.entries(item).map(([key, value]) => {
+        if (typeof value === "string") return [key, translate(locale, value)];
+        if (Array.isArray(value)) {
+          return [
+            key,
+            value.map((entry) => (typeof entry === "string" ? translate(locale, entry) : entry)),
+          ];
+        }
+        return [key, value];
+      }),
+    ) as T,
+  );
+}
+
+function localizeRows<T extends string[]>(rows: T[], locale: SiteLocale) {
+  return rows.map((row) => row.map((value) => translate(locale, value)) as T);
+}
 
 function updateParallax(event: PointerEvent<HTMLElement>) {
   const rect = event.currentTarget.getBoundingClientRect();
@@ -354,7 +383,37 @@ function MoreDetails({ children, label = "展开深读" }: { children: ReactNode
   );
 }
 
-export default function ZhangShengJunExperience() {
+export default function ZhangShengJunExperience({ locale = "zh-cn" }: { locale?: SiteLocale }) {
+  const content = useMemo(
+    () => ({
+      navItems: localizeRecords(navItemsSource, locale),
+      heroStats: localizeRows(heroStatsSource, locale),
+      heroScenes: localizeRecords(heroScenesSource, locale),
+      originSites: localizeRecords(originSitesSource, locale),
+      landscapeCategories: localizeRows(landscapeCategoriesSource, locale),
+      legendChapters: localizeRecords(legendChaptersSource, locale),
+      dharmaFeatures: localizeRecords(dharmaFeaturesSource, locale),
+      divineRoles: localizeRecords(divineRolesSource, locale),
+      networkNodes: localizeRecords(networkNodesSource, locale),
+      archiveSources: localizeRows(archiveSourcesSource, locale),
+      ritualSteps: localizeRows(ritualStepsSource, locale),
+    }),
+    [locale],
+  );
+  const {
+    navItems,
+    heroStats,
+    heroScenes,
+    originSites,
+    landscapeCategories,
+    legendChapters,
+    dharmaFeatures,
+    divineRoles,
+    networkNodes,
+    archiveSources,
+    ritualSteps,
+  } = content;
+  const t = (source: string) => translate(locale, source);
   const [heroActive, setHeroActive] = useState(0);
   const [heroPlaying, setHeroPlaying] = useState(false);
   const [heroVideoReady, setHeroVideoReady] = useState(false);
@@ -372,6 +431,10 @@ export default function ZhangShengJunExperience() {
   const filmCloseRef = useRef<HTMLButtonElement>(null);
   const legendRefs = useRef<(HTMLElement | null)[]>([]);
   const mobileMenuRef = useRef<HTMLDetailsElement>(null);
+
+  useEffect(() => {
+    document.documentElement.lang = localeInfo[locale].htmlLang;
+  }, [locale]);
 
   useEffect(() => {
     let frame = 0;
@@ -526,21 +589,24 @@ export default function ZhangShengJunExperience() {
   const heroScene = heroScenes[heroActive];
 
   return (
-    <main className={styles.shell}>
+    <main
+      className={`${styles.shell} ${locale === "en" ? styles.shellEnglish : ""}`}
+      lang={localeInfo[locale].htmlLang}
+    >
       <div className={styles.scrollProgress} aria-hidden="true">
         <span style={{ transform: `scaleX(${scrollProgress})` }} />
       </div>
 
       <header className={`${styles.header} ${headerCompact ? styles.headerCompact : ""}`}>
-        <a className={styles.brand} href="#home" aria-label="返回首页">
+        <a className={styles.brand} href="#home" aria-label={t("返回首页")}>
           <BrandMark />
           <span className={styles.brandType}>
-            <strong>永泰方壶岩</strong>
-            <small>张圣君母殿 · FANGHU MOTHER TEMPLE</small>
+            <strong>{t("永泰方壶岩")}</strong>
+            <small>{t("张圣君母殿 · FANGHU MOTHER TEMPLE")}</small>
           </span>
         </a>
 
-        <nav className={styles.nav} aria-label="网站主导航">
+        <nav className={styles.nav} aria-label={t("网站主导航")}>
           {navItems.map((item) => (
             <a key={item.href} href={item.href}>
               {item.label}
@@ -548,13 +614,29 @@ export default function ZhangShengJunExperience() {
           ))}
         </nav>
 
-        <a className={styles.headerAction} href="#media">
-          <CirclePlay size={17} aria-hidden="true" />
-          法主视界
-        </a>
+        <div className={styles.headerTools}>
+          <nav className={styles.languageSwitcher} aria-label={t("语言版本")}>
+            {siteLocales.map((siteLocale) => (
+              <a
+                key={siteLocale}
+                href={localeInfo[siteLocale].href}
+                hrefLang={localeInfo[siteLocale].htmlLang}
+                lang={localeInfo[siteLocale].htmlLang}
+                aria-current={locale === siteLocale ? "page" : undefined}
+                title={localeInfo[siteLocale].label}
+              >
+                {localeInfo[siteLocale].shortLabel}
+              </a>
+            ))}
+          </nav>
+          <a className={styles.headerAction} href="#media">
+            <CirclePlay size={17} aria-hidden="true" />
+            {t("法主视界")}
+          </a>
+        </div>
 
         <details className={styles.mobileMenu} ref={mobileMenuRef}>
-          <summary aria-label="打开导航菜单">
+          <summary aria-label={t("打开导航菜单")}>
             <Menu size={22} aria-hidden="true" />
           </summary>
           <div>
@@ -564,6 +646,19 @@ export default function ZhangShengJunExperience() {
                 <ArrowRight size={16} aria-hidden="true" />
               </a>
             ))}
+            <nav className={styles.mobileLocaleSwitcher} aria-label={t("语言版本")}>
+              {siteLocales.map((siteLocale) => (
+                <a
+                  key={siteLocale}
+                  href={localeInfo[siteLocale].href}
+                  hrefLang={localeInfo[siteLocale].htmlLang}
+                  lang={localeInfo[siteLocale].htmlLang}
+                  aria-current={locale === siteLocale ? "page" : undefined}
+                >
+                  {localeInfo[siteLocale].label}
+                </a>
+              ))}
+            </nav>
           </div>
         </details>
       </header>
@@ -659,7 +754,7 @@ export default function ZhangShengJunExperience() {
         >
           <p className={styles.heroLocation}>
             <MapPin size={15} aria-hidden="true" />
-            中国 · 福建 · 永泰
+            {t("中国 · 福建 · 永泰")}
           </p>
           <p className={styles.heroStrap}>{heroScene.eyebrow}</p>
           <h1>
@@ -674,12 +769,12 @@ export default function ZhangShengJunExperience() {
             </a>
             <a className={styles.secondaryAction} href="#media">
               <CirclePlay size={18} aria-hidden="true" />
-              进入法主视界
+              {t("进入法主视界")}
             </a>
           </div>
         </div>
 
-        <div className={styles.heroDirector} aria-label="首屏视觉章节">
+        <div className={styles.heroDirector} aria-label={t("首屏视觉章节")}>
           <div className={styles.heroDirectorHeader}>
             <div>
               <span>40S CINEMATIC MYTH</span>
@@ -687,19 +782,19 @@ export default function ZhangShengJunExperience() {
             </div>
             <div className={styles.heroDirectorControls}>
               <span>{heroScene.number} / {String(heroScenes.length).padStart(2, "0")}</span>
-              <button type="button" onClick={() => stepHeroScene(-1)} aria-label="上一幕">
+              <button type="button" onClick={() => stepHeroScene(-1)} aria-label={t("上一幕")}>
                 <ChevronLeft size={19} aria-hidden="true" />
               </button>
               {motionAllowed ? (
                 <button
                   type="button"
                   onClick={toggleHeroPlayback}
-                  aria-label={heroPlaying ? "暂停主片" : "播放主片"}
+                  aria-label={heroPlaying ? t("暂停主片") : t("播放主片")}
                 >
                   {heroPlaying ? <Pause size={17} aria-hidden="true" /> : <Play size={17} aria-hidden="true" />}
                 </button>
               ) : null}
-              <button type="button" onClick={() => stepHeroScene(1)} aria-label="下一幕">
+              <button type="button" onClick={() => stepHeroScene(1)} aria-label={t("下一幕")}>
                 <ChevronRight size={19} aria-hidden="true" />
               </button>
             </div>
@@ -712,7 +807,7 @@ export default function ZhangShengJunExperience() {
                 className={index === heroActive ? styles.heroFilmstripActive : ""}
                 onClick={() => selectHeroScene(index)}
                 aria-pressed={index === heroActive}
-                aria-label={`切换到${scene.label}`}
+                aria-label={localizedLabel(locale, "切换到", scene.label)}
               >
                 <span className={styles.heroThumbnail}>
                   <Image
@@ -733,7 +828,7 @@ export default function ZhangShengJunExperience() {
         </div>
       </section>
 
-      <section className={styles.signalBand} aria-label="张圣君信仰概览">
+      <section className={styles.signalBand} aria-label={t("张圣君信仰概览")}>
         {heroStats.map(([value, label]) => (
           <div key={label}>
             <strong>{value}</strong>
@@ -742,10 +837,10 @@ export default function ZhangShengJunExperience() {
         ))}
       </section>
 
-      <section className={styles.origin} id="fanghu">
+      <section className={styles.origin} id="fanghu" data-watermark={t("方壶")}>
         <div className={styles.sectionInner}>
-          <SectionHeading eyebrow="01 · SACRED ORIGIN" title="天下法主，根在方壶">
-            一池、三台、七洞、三峰、二十一岩。这里的山水不是传说的布景，而是“圣迹营造”的本体：自然地貌、神公叙事与日常信仰彼此嵌合。
+          <SectionHeading eyebrow="01 · SACRED ORIGIN" title={t("天下法主，根在方壶")}>
+            {t("一池、三台、七洞、三峰、二十一岩。这里的山水不是传说的布景，而是“圣迹营造”的本体：自然地貌、神公叙事与日常信仰彼此嵌合。")}
           </SectionHeading>
 
           <div className={styles.originExperience} data-reveal>
@@ -756,7 +851,7 @@ export default function ZhangShengJunExperience() {
             >
               <Image
                 src="/zhangshengjun/fanghu-hero.jpg"
-                alt="方壶岩圣迹交互地图背景"
+                alt={t("方壶岩圣迹交互地图背景")}
                 fill
                 sizes="(max-width: 980px) 100vw, 68vw"
                 className={`${styles.originMapImage} ${styles.parallaxBack}`}
@@ -795,7 +890,7 @@ export default function ZhangShengJunExperience() {
               ))}
               <div className={styles.originMapLabel}>
                 <Compass size={18} aria-hidden="true" />
-                方壶圣迹图
+                {t("方壶圣迹图")}
               </div>
             </div>
 
@@ -806,7 +901,7 @@ export default function ZhangShengJunExperience() {
               <strong>{originSites[originActive].text}</strong>
               <p>{originSites[originActive].detail}</p>
               <div className={styles.originStoryRule} />
-              <span className={styles.originStoryHint}>点击图中圣迹继续探索</span>
+              <span className={styles.originStoryHint}>{t("点击图中圣迹继续探索")}</span>
             </aside>
           </div>
 
@@ -824,8 +919,8 @@ export default function ZhangShengJunExperience() {
 
       <section className={styles.legend} id="legend">
         <div className={styles.sectionInner}>
-          <SectionHeading eyebrow="02 · LEGEND OF APOTHEOSIS" title="一个凡人，如何成为千年神公" tone="dark">
-            这不是四张生平卡片，而是一条由贫寒、奇遇、修行、护民功德与地方记忆共同铺成的成神之路。继续滚动，四幕依次显现。
+          <SectionHeading eyebrow="02 · LEGEND OF APOTHEOSIS" title={t("一个凡人，如何成为千年神公")} tone="dark">
+            {t("这不是四张生平卡片，而是一条由贫寒、奇遇、修行、护民功德与地方记忆共同铺成的成神之路。继续滚动，四幕依次显现。")}
           </SectionHeading>
 
           <div className={styles.legendJourney}>
@@ -856,7 +951,7 @@ export default function ZhangShengJunExperience() {
                   <button
                     type="button"
                     key={chapter.number}
-                    aria-label={`查看${chapter.title}`}
+                    aria-label={localizedLabel(locale, "查看", chapter.title)}
                     aria-pressed={legendActive === index}
                     className={legendActive === index ? styles.legendProgressActive : ""}
                     onClick={() => legendRefs.current[index]?.scrollIntoView({ behavior: "smooth", block: "center" })}
@@ -897,7 +992,7 @@ export default function ZhangShengJunExperience() {
                       <li key={fact}>{fact}</li>
                     ))}
                   </ul>
-                  <MoreDetails>
+                  <MoreDetails label={t("展开深读")}>
                     <p>{chapter.more}</p>
                   </MoreDetails>
                 </article>
@@ -918,20 +1013,20 @@ export default function ZhangShengJunExperience() {
         />
         <div className={styles.syncreticInner} data-reveal>
           <p>THE DUAL TRADITION</p>
-          <h2 id="syncretic-title">亦道 · 亦佛</h2>
+          <h2 id="syncretic-title">{t("亦道 · 亦佛")}</h2>
           <div className={styles.syncreticColumns}>
             <article>
-              <span>闾山法脉</span>
-              <h3>雷霆之威</h3>
-              <p>五雷正法、法索、宝剑与驱邪科仪，建立护境镇邪的行动力量。</p>
+              <span>{t("闾山法脉")}</span>
+              <h3>{t("雷霆之威")}</h3>
+              <p>{t("五雷正法、法索、宝剑与驱邪科仪，建立护境镇邪的行动力量。")}</p>
             </article>
             <div className={styles.syncreticCenter} aria-hidden="true">
-              双轮
+              {t("双轮")}
             </div>
             <article>
-              <span>瑜伽教法</span>
-              <h3>慈悲度世</h3>
-              <p>治病、救苦、济民与普度叙事，让法术始终指向现实人生。</p>
+              <span>{t("瑜伽教法")}</span>
+              <h3>{t("慈悲度世")}</h3>
+              <p>{t("治病、救苦、济民与普度叙事，让法术始终指向现实人生。")}</p>
             </article>
           </div>
         </div>
@@ -939,8 +1034,8 @@ export default function ZhangShengJunExperience() {
 
       <section className={styles.heritage} id="heritage">
         <div className={styles.sectionInner}>
-          <SectionHeading eyebrow="03 · ICONOGRAPHY & LIVING HERITAGE" title="一尊法相，藏着整套民间密码" tone="dark">
-            黑面、披发、跣足、宝剑与麻蛇不是装饰，而是神迹、法脉与民众愿望共同留下的视觉档案。点击法相标记，逐一解读。
+          <SectionHeading eyebrow="03 · ICONOGRAPHY & LIVING HERITAGE" title={t("一尊法相，藏着整套民间密码")} tone="dark">
+            {t("黑面、披发、跣足、宝剑与麻蛇不是装饰，而是神迹、法脉与民众愿望共同留下的视觉档案。点击法相标记，逐一解读。")}
           </SectionHeading>
 
           <div className={styles.dharmaExperience} data-reveal>
@@ -951,7 +1046,7 @@ export default function ZhangShengJunExperience() {
             >
               <Image
                 src="/zhangshengjun/dharma-iconography.jpg"
-                alt="张圣君黑面披发、手执宝剑与麻蛇法索的武身法相"
+                alt={t("张圣君黑面披发、手执宝剑与麻蛇法索的武身法相")}
                 fill
                 sizes="(max-width: 980px) 100vw, 62vw"
                 className={styles.parallaxBack}
@@ -965,13 +1060,13 @@ export default function ZhangShengJunExperience() {
                     dharmaActive === index ? styles.dharmaHotspotActive : ""
                   }`}
                   onClick={() => setDharmaActive(index)}
-                  aria-label={`解读${feature.title}`}
+                  aria-label={localizedLabel(locale, "解读", feature.title)}
                   aria-pressed={dharmaActive === index}
                 >
                   <span>{index + 1}</span>
                 </button>
               ))}
-              <div className={styles.dharmaCaption}>武身法相 · 降妖护民</div>
+              <div className={styles.dharmaCaption}>{t("武身法相 · 降妖护民")}</div>
             </div>
 
             <aside className={styles.dharmaAnnotation} aria-live="polite">
@@ -986,7 +1081,7 @@ export default function ZhangShengJunExperience() {
                     key={feature.title}
                     onClick={() => setDharmaActive(index)}
                     className={dharmaActive === index ? styles.dharmaFeatureNavActive : ""}
-                    aria-label={`切换到${feature.title}`}
+                    aria-label={localizedLabel(locale, "切换到", feature.title)}
                   >
                     {String(index + 1).padStart(2, "0")}
                   </button>
@@ -1015,21 +1110,21 @@ export default function ZhangShengJunExperience() {
       <section className={styles.ritual} id="ritual">
         <Image
           src="/zhangshengjun/ritual-procession.jpg"
-          alt="村民抬神轿行进在田垄之间的迎神游田仪式"
+          alt={t("村民抬神轿行进在田垄之间的迎神游田仪式")}
           fill
           sizes="100vw"
           className={styles.ritualImage}
         />
         <div className={styles.ritualShade} />
         <div className={styles.ritualContent} data-reveal>
-          <span>活态非遗 · 迎神游田</span>
-          <h2>神轿走过田垄，日常山村成为神圣路径</h2>
+          <span>{t("活态非遗 · 迎神游田")}</span>
+          <h2>{t("神轿走过田垄，日常山村成为神圣路径")}</h2>
           <p>
-            夏至前后，庙宇、村巷与农田被一条巡游路线重新连接。它既祈求风调雨顺，也通过值年组织、按户协作与仪仗分工，维系乡村共同体。
+            {t("夏至前后，庙宇、村巷与农田被一条巡游路线重新连接。它既祈求风调雨顺，也通过值年组织、按户协作与仪仗分工，维系乡村共同体。")}
           </p>
-          <MoreDetails label="展开仪式逻辑">
+          <MoreDetails label={t("展开仪式逻辑")}>
             <p>
-              农事节奏决定仪式时间，神像巡行把生产空间临时转化为圣境；村民共同筹资、分工与迎送，则让信仰成为活态的社会治理资源。
+              {t("农事节奏决定仪式时间，神像巡行把生产空间临时转化为圣境；村民共同筹资、分工与迎送，则让信仰成为活态的社会治理资源。")}
             </p>
           </MoreDetails>
         </div>
@@ -1044,10 +1139,10 @@ export default function ZhangShengJunExperience() {
         </div>
       </section>
 
-      <section className={styles.global} id="global">
+      <section className={styles.global} id="global" data-watermark={t("香路")}>
         <div className={styles.sectionInner}>
-          <SectionHeading eyebrow="04 · CROSS-STRAIT INCENSE ROUTES" title="从一座母殿，到一张跨海香路">
-            自明清移民以来，法主公信仰由闽中山地进入台湾城市与港口，再随华人社群远播海外。点击节点，查看每一段香火如何落地。
+          <SectionHeading eyebrow="04 · CROSS-STRAIT INCENSE ROUTES" title={t("从一座母殿，到一张跨海香路")}>
+            {t("自明清移民以来，法主公信仰由闽中山地进入台湾城市与港口，再随华人社群远播海外。点击节点，查看每一段香火如何落地。")}
           </SectionHeading>
 
           <div className={styles.networkExperience} data-reveal>
@@ -1071,7 +1166,7 @@ export default function ZhangShengJunExperience() {
               ))}
               <div className={styles.networkMapTitle}>
                 <Globe2 size={22} aria-hidden="true" />
-                万香归宗图
+                {t("万香归宗图")}
               </div>
             </div>
 
@@ -1083,15 +1178,15 @@ export default function ZhangShengJunExperience() {
               <div className={styles.networkMilestones}>
                 <article>
                   <strong>1827</strong>
-                  <span>宜兰移民信仰线索</span>
+                  <span>{t("宜兰移民信仰线索")}</span>
                 </article>
                 <article>
                   <strong>2000—2001</strong>
-                  <span>台湾信众规模化寻根</span>
+                  <span>{t("台湾信众规模化寻根")}</span>
                 </article>
                 <article>
-                  <strong>今日</strong>
-                  <span>两岸与海外持续进香</span>
+                  <strong>{t("今日")}</strong>
+                  <span>{t("两岸与海外持续进香")}</span>
                 </article>
               </div>
             </aside>
@@ -1099,45 +1194,45 @@ export default function ZhangShengJunExperience() {
 
           <div className={styles.networkStatement} data-reveal>
             <Route size={28} aria-hidden="true" />
-            <p>香路不只连接庙宇，也连接移民记忆、商贸信用、乡土身份与两岸共同的文化根脉。</p>
+            <p>{t("香路不只连接庙宇，也连接移民记忆、商贸信用、乡土身份与两岸共同的文化根脉。")}</p>
           </div>
         </div>
       </section>
 
       <section className={styles.media} id="media">
         <div className={styles.sectionInner}>
-          <SectionHeading eyebrow="05 · MEDIA & ARCHIVE" title="让千年神公，进入今天的观看方式">
-            网站同时服务三种阅读：二十秒看见方壶、三分钟理解传奇、三十分钟进入史料。短视频、影像策展与文献目录由此汇合。
+          <SectionHeading eyebrow="05 · MEDIA & ARCHIVE" title={t("让千年神公，进入今天的观看方式")}>
+            {t("网站同时服务三种阅读：二十秒看见方壶、三分钟理解传奇、三十分钟进入史料。短视频、影像策展与文献目录由此汇合。")}
           </SectionHeading>
 
           <div className={styles.mediaMosaic} data-reveal>
             <article className={styles.mediaFeature}>
-              <Image src="/zhangshengjun/mythic-lacquer-hero-v3.jpg" alt="张圣君漆艺神话短片概念画面" fill sizes="(max-width: 980px) 100vw, 58vw" />
+              <Image src="/zhangshengjun/mythic-lacquer-hero-v3.jpg" alt={t("张圣君漆艺神话短片概念画面")} fill sizes="(max-width: 980px) 100vw, 58vw" />
               <div className={styles.mediaShade} />
               <div>
-                <span>神话影像系列 · 01</span>
-                <h3>法主降临：黑漆山骨中的千年神公</h3>
-                <p>以漆器、朱砂、法索与闽中山水建立全新视觉母版，再由连续十秒镜头扩展成可交互的首页片头。</p>
-                <button type="button" onClick={() => setFilmOpen(true)} aria-label="播放法主降临完整影像">
+                <span>{t("神话影像系列 · 01")}</span>
+                <h3>{t("法主降临：黑漆山骨中的千年神公")}</h3>
+                <p>{t("以漆器、朱砂、法索与闽中山水建立全新视觉母版，再由连续十秒镜头扩展成可交互的首页片头。")}</p>
+                <button type="button" onClick={() => setFilmOpen(true)} aria-label={t("播放法主降临完整影像")}>
                   <CirclePlay size={19} aria-hidden="true" />
-                  播放 40 秒主片
+                  {t("播放 40 秒主片")}
                 </button>
               </div>
             </article>
             <article className={styles.mediaSideTop}>
-              <Image src="/zhangshengjun/woodcutter-origin-v2.jpg" alt="山中樵夫短视频概念画面" fill sizes="(max-width: 980px) 100vw, 36vw" />
+              <Image src="/zhangshengjun/woodcutter-origin-v2.jpg" alt={t("山中樵夫短视频概念画面")} fill sizes="(max-width: 980px) 100vw, 36vw" />
               <div className={styles.mediaShade} />
               <div>
-                <span>人物前传 · 02</span>
-                <h3>张锄柄：神明之前的普通人</h3>
+                <span>{t("人物前传 · 02")}</span>
+                <h3>{t("张锄柄：神明之前的普通人")}</h3>
               </div>
             </article>
             <article className={styles.mediaSideBottom}>
-              <Image src="/zhangshengjun/ritual-procession.jpg" alt="迎神游田纪录影像概念画面" fill sizes="(max-width: 980px) 100vw, 36vw" />
+              <Image src="/zhangshengjun/ritual-procession.jpg" alt={t("迎神游田纪录影像概念画面")} fill sizes="(max-width: 980px) 100vw, 36vw" />
               <div className={styles.mediaShade} />
               <div>
-                <span>非遗现场 · 03</span>
-                <h3>游田：一条会移动的圣路</h3>
+                <span>{t("非遗现场 · 03")}</span>
+                <h3>{t("游田：一条会移动的圣路")}</h3>
               </div>
             </article>
           </div>
@@ -1145,13 +1240,13 @@ export default function ZhangShengJunExperience() {
           <div className={styles.archive} id="archive" data-reveal>
             <div className={styles.archiveIntro}>
               <BookOpenText size={34} aria-hidden="true" />
-              <p>文库与史料</p>
-              <h3>把传说放回文本，把文本放回田野</h3>
+              <p>{t("文库与史料")}</p>
+              <h3>{t("把传说放回文本，把文本放回田野")}</h3>
               <p>
-                文库将区分古籍原文、地方志、科仪抄本、田野记录与当代研究，并明确标示生卒年、封号等材料差异。
+                {t("文库将区分古籍原文、地方志、科仪抄本、田野记录与当代研究，并明确标示生卒年、封号等材料差异。")}
               </p>
               <a href="mailto:info@zhangshengjun.org">
-                提交史料线索
+                {t("提交史料线索")}
                 <ArrowRight size={17} aria-hidden="true" />
               </a>
             </div>
@@ -1177,7 +1272,7 @@ export default function ZhangShengJunExperience() {
           className={styles.filmModal}
           role="dialog"
           aria-modal="true"
-          aria-label="法主降临完整影像"
+          aria-label={t("法主降临完整影像")}
           onMouseDown={(event) => {
             if (event.currentTarget === event.target) setFilmOpen(false);
           }}
@@ -1188,7 +1283,7 @@ export default function ZhangShengJunExperience() {
               className={styles.filmClose}
               type="button"
               onClick={() => setFilmOpen(false)}
-              aria-label="关闭影像"
+              aria-label={t("关闭影像")}
             >
               <X size={22} aria-hidden="true" />
             </button>
@@ -1215,21 +1310,21 @@ export default function ZhangShengJunExperience() {
         <div className={styles.footerBrand}>
           <BrandMark />
           <div>
-            <strong>永泰方壶岩 · 张圣君母殿</strong>
-            <p>天下法主，根在方壶</p>
+            <strong>{t("永泰方壶岩 · 张圣君母殿")}</strong>
+            <p>{t("天下法主，根在方壶")}</p>
           </div>
         </div>
         <div className={styles.footerAddress}>
           <MapPin size={18} aria-hidden="true" />
-          <span>福建省福州市永泰县盘谷乡方壶山</span>
+          <span>{t("福建省福州市永泰县盘谷乡方壶山")}</span>
         </div>
-        <nav aria-label="页脚导航">
+        <nav aria-label={t("页脚导航")}>
           {navItems.map((item) => (
             <a key={item.href} href={item.href}>{item.label}</a>
           ))}
         </nav>
         <p className={styles.footerLegal}>
-          © {new Date().getFullYear()} 永泰方壶岩张圣君母殿管理委员会 / 福建张圣君信仰文化研究会
+          © {new Date().getFullYear()} {t("永泰方壶岩张圣君母殿管理委员会 / 福建张圣君信仰文化研究会")}
         </p>
       </footer>
     </main>
