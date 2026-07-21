@@ -29,6 +29,7 @@ import {
   Shield,
   Sparkles,
   Sprout,
+  ZoomIn,
   X,
 } from "lucide-react";
 import {
@@ -302,6 +303,65 @@ const ritualStepsSource = [
   ["04", "回銮安座", "共同体重聚"],
 ];
 
+const artifactAtlasSource = [
+  {
+    number: "00",
+    eyebrow: "视觉母版",
+    title: "法器与材质总谱",
+    text: "法剑、法索、武身衣冠与黑漆山骨在同一张总板中建立比例、质感与色彩秩序，成为整套神公影像的视觉基准。",
+    image: "/zhangshengjun/reference-bible/master-prop-material-board.jpg",
+    position: "center",
+  },
+  {
+    number: "01",
+    eyebrow: "镇邪法器",
+    title: "五雷法剑",
+    text: "窄身直刃、云头护手与旧铁包浆，把雷法威仪收束为克制而有重量的器物形象。",
+    image: "/zhangshengjun/reference-bible/generated/prop-ritual-sword-sheet.jpg",
+    position: "center",
+  },
+  {
+    number: "02",
+    eyebrow: "闾山法脉",
+    title: "麻蛇法索",
+    text: "麻纤维、朱砂结与铁环构成蛇形法索，连接降蛇传说、护法意象与闾山科仪。",
+    image: "/zhangshengjun/reference-bible/generated/prop-dharma-rope-sheet.jpg",
+    position: "center",
+  },
+  {
+    number: "03",
+    eyebrow: "造像纹理",
+    title: "武身衣冠",
+    text: "黑衣、朱褐内衫、雷纹腰扣与法具筒，让披发跣足的武身法相拥有可信的生活痕迹。",
+    image: "/zhangshengjun/reference-bible/generated/costume-ornament-sheet.jpg",
+    position: "center",
+  },
+  {
+    number: "04",
+    eyebrow: "漆艺地貌",
+    title: "方壶山骨",
+    text: "黑漆岩层、朱砂雷隙、飞瀑与崖间母殿，把方壶山水转译为可触摸的神话材质。",
+    image: "/zhangshengjun/reference-bible/generated/material-fanghu-lacquer-rock-sheet.jpg",
+    position: "center",
+  },
+  {
+    number: "05",
+    eyebrow: "悟道信物",
+    title: "仙桃与棋石",
+    text: "半桃、棋子、棋盘石与樵具对应食桃悟道的关键叙事，也保留凡人劳作的真实触感。",
+    image: "/zhangshengjun/reference-bible/generated/props-peach-go-tools-sheet.jpg",
+    position: "center",
+  },
+  {
+    number: "06",
+    eyebrow: "活态信俗",
+    title: "游田仪仗",
+    text: "神轿、长幡、灯笼、香炉与层叠水田，共同构成神圣路径在乡村中移动的完整现场。",
+    image: "/zhangshengjun/reference-bible/generated/props-field-procession-kit-v2.jpg",
+    position: "center",
+  },
+];
+
 function localizeRecords<T extends Record<string, unknown>>(items: T[], locale: SiteLocale) {
   return items.map((item) =>
     Object.fromEntries(
@@ -397,6 +457,7 @@ export default function ZhangShengJunExperience({ locale = "zh-cn" }: { locale?:
       networkNodes: localizeRecords(networkNodesSource, locale),
       archiveSources: localizeRows(archiveSourcesSource, locale),
       ritualSteps: localizeRows(ritualStepsSource, locale),
+      artifactAtlas: localizeRecords(artifactAtlasSource, locale),
     }),
     [locale],
   );
@@ -412,6 +473,7 @@ export default function ZhangShengJunExperience({ locale = "zh-cn" }: { locale?:
     networkNodes,
     archiveSources,
     ritualSteps,
+    artifactAtlas,
   } = content;
   const t = (source: string) => translate(locale, source);
   const [heroActive, setHeroActive] = useState(0);
@@ -420,6 +482,7 @@ export default function ZhangShengJunExperience({ locale = "zh-cn" }: { locale?:
   const [heroInView, setHeroInView] = useState(true);
   const [motionAllowed, setMotionAllowed] = useState(false);
   const [filmOpen, setFilmOpen] = useState(false);
+  const [artifactActive, setArtifactActive] = useState<number | null>(null);
   const [originActive, setOriginActive] = useState(0);
   const [legendActive, setLegendActive] = useState(0);
   const [dharmaActive, setDharmaActive] = useState(0);
@@ -429,6 +492,7 @@ export default function ZhangShengJunExperience({ locale = "zh-cn" }: { locale?:
   const heroVideoRef = useRef<HTMLVideoElement>(null);
   const heroSectionRef = useRef<HTMLElement>(null);
   const filmCloseRef = useRef<HTMLButtonElement>(null);
+  const artifactCloseRef = useRef<HTMLButtonElement>(null);
   const legendRefs = useRef<(HTMLElement | null)[]>([]);
   const mobileMenuRef = useRef<HTMLDetailsElement>(null);
 
@@ -483,22 +547,28 @@ export default function ZhangShengJunExperience({ locale = "zh-cn" }: { locale?:
   }, []);
 
   useEffect(() => {
-    if (!filmOpen) return;
+    if (!filmOpen && artifactActive === null) return;
 
     const previousOverflow = document.body.style.overflow;
     const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setFilmOpen(false);
+      if (event.key === "Escape") {
+        setFilmOpen(false);
+        setArtifactActive(null);
+      }
     };
 
     document.body.style.overflow = "hidden";
     window.addEventListener("keydown", closeOnEscape);
-    window.requestAnimationFrame(() => filmCloseRef.current?.focus());
+    window.requestAnimationFrame(() => {
+      if (filmOpen) filmCloseRef.current?.focus();
+      else artifactCloseRef.current?.focus();
+    });
 
     return () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", closeOnEscape);
     };
-  }, [filmOpen]);
+  }, [artifactActive, filmOpen]);
 
   useEffect(() => {
     const video = heroVideoRef.current;
@@ -587,6 +657,14 @@ export default function ZhangShengJunExperience({ locale = "zh-cn" }: { locale?:
   };
 
   const heroScene = heroScenes[heroActive];
+  const activeArtifact = artifactActive === null ? null : artifactAtlas[artifactActive];
+
+  const stepArtifact = (direction: number) => {
+    setArtifactActive((current) => {
+      const index = current ?? 0;
+      return (index + direction + artifactAtlas.length) % artifactAtlas.length;
+    });
+  };
 
   return (
     <main
@@ -1107,6 +1185,95 @@ export default function ZhangShengJunExperience({ locale = "zh-cn" }: { locale?:
         </div>
       </section>
 
+      <section className={styles.artifactAtlas} id="atlas">
+        <Image
+          src="/zhangshengjun/reference-bible/anchors/anchor-waterfall-temple.jpg"
+          alt=""
+          width={546}
+          height={2048}
+          className={styles.artifactAtlasEdge}
+          aria-hidden="true"
+        />
+        <div className={styles.sectionInner}>
+          <SectionHeading
+            eyebrow="04 · RITUAL OBJECTS & VISUAL CANON"
+            title={t("器象图谱：把法主世界看得更近")}
+            tone="dark"
+          >
+            {t("宝剑、法索、衣冠、山骨、仙桃与游田仪仗，共同组成张圣君数字影像的器物语言。它们让神迹不只被讲述，也能被细看。")}
+          </SectionHeading>
+
+          <div className={styles.artifactLead} data-reveal>
+            <button
+              type="button"
+              className={`${styles.artifactLeadVisual} ${styles.parallaxArea}`}
+              onPointerMove={updateParallax}
+              onPointerLeave={resetParallax}
+              onClick={() => setArtifactActive(0)}
+              aria-label={localizedLabel(locale, "查看", artifactAtlas[0].title)}
+            >
+              <Image
+                src={artifactAtlas[0].image}
+                alt={artifactAtlas[0].title}
+                fill
+                loading="eager"
+                sizes="(max-width: 980px) 100vw, 68vw"
+                className={styles.parallaxBack}
+                style={{ objectPosition: artifactAtlas[0].position }}
+              />
+              <span className={styles.artifactImageShade} />
+              <span className={styles.artifactZoom}>
+                <ZoomIn size={18} aria-hidden="true" />
+                {t("查看完整设定")}
+              </span>
+            </button>
+            <div className={styles.artifactLeadCopy}>
+              <p>VISUAL CANON · DIGITAL INTERPRETATION</p>
+              <span>{artifactAtlas[0].eyebrow}</span>
+              <h3>{t("一把剑，一根法索，一身山川气")}</h3>
+              <p>{artifactAtlas[0].text}</p>
+              <div className={styles.artifactCount}>
+                <strong>07</strong>
+                <span>{t("组器物与场景设定")}</span>
+              </div>
+              <small>{t("数字艺术设定 · 非文物实拍")}</small>
+            </div>
+          </div>
+
+          <div className={styles.artifactGrid} data-reveal>
+            {artifactAtlas.slice(1).map((artifact, index) => (
+              <button
+                type="button"
+                className={`${styles.artifactTile} ${styles.parallaxArea}`}
+                key={artifact.number}
+                onPointerMove={updateParallax}
+                onPointerLeave={resetParallax}
+                onClick={() => setArtifactActive(index + 1)}
+                aria-label={localizedLabel(locale, "查看", artifact.title)}
+              >
+                <Image
+                  src={artifact.image}
+                  alt={artifact.title}
+                  fill
+                  loading="eager"
+                  sizes="(max-width: 720px) 100vw, (max-width: 1180px) 50vw, 33vw"
+                  className={styles.parallaxBack}
+                  style={{ objectPosition: artifact.position }}
+                />
+                <span className={styles.artifactImageShade} />
+                <span className={styles.artifactTileIndex}>{artifact.number}</span>
+                <span className={styles.artifactTileCopy}>
+                  <small>{artifact.eyebrow}</small>
+                  <strong>{artifact.title}</strong>
+                  <em>{artifact.text}</em>
+                </span>
+                <ZoomIn className={styles.artifactTileZoom} size={20} aria-hidden="true" />
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className={styles.ritual} id="ritual">
         <Image
           src="/zhangshengjun/ritual-procession.jpg"
@@ -1141,7 +1308,7 @@ export default function ZhangShengJunExperience({ locale = "zh-cn" }: { locale?:
 
       <section className={styles.global} id="global" data-watermark={t("香路")}>
         <div className={styles.sectionInner}>
-          <SectionHeading eyebrow="04 · CROSS-STRAIT INCENSE ROUTES" title={t("从一座母殿，到一张跨海香路")}>
+          <SectionHeading eyebrow="05 · CROSS-STRAIT INCENSE ROUTES" title={t("从一座母殿，到一张跨海香路")}>
             {t("自明清移民以来，法主公信仰由闽中山地进入台湾城市与港口，再随华人社群远播海外。点击节点，查看每一段香火如何落地。")}
           </SectionHeading>
 
@@ -1201,7 +1368,7 @@ export default function ZhangShengJunExperience({ locale = "zh-cn" }: { locale?:
 
       <section className={styles.media} id="media">
         <div className={styles.sectionInner}>
-          <SectionHeading eyebrow="05 · MEDIA & ARCHIVE" title={t("让千年神公，进入今天的观看方式")}>
+          <SectionHeading eyebrow="06 · MEDIA & ARCHIVE" title={t("让千年神公，进入今天的观看方式")}>
             {t("网站同时服务三种阅读：二十秒看见方壶、三分钟理解传奇、三十分钟进入史料。短视频、影像策展与文献目录由此汇合。")}
           </SectionHeading>
 
@@ -1266,6 +1433,54 @@ export default function ZhangShengJunExperience({ locale = "zh-cn" }: { locale?:
           </div>
         </div>
       </section>
+
+      {activeArtifact ? (
+        <div
+          className={styles.artifactModal}
+          role="dialog"
+          aria-modal="true"
+          aria-label={`${t("器象图谱")} · ${activeArtifact.title}`}
+          onMouseDown={(event) => {
+            if (event.currentTarget === event.target) setArtifactActive(null);
+          }}
+        >
+          <div className={styles.artifactModalStage}>
+            <button
+              ref={artifactCloseRef}
+              className={styles.artifactModalClose}
+              type="button"
+              onClick={() => setArtifactActive(null)}
+              aria-label={t("关闭图鉴")}
+            >
+              <X size={22} aria-hidden="true" />
+            </button>
+            <div className={styles.artifactModalVisual}>
+              <Image
+                src={activeArtifact.image}
+                alt={activeArtifact.title}
+                fill
+                loading="eager"
+                sizes="(max-width: 980px) 100vw, 76vw"
+              />
+            </div>
+            <aside className={styles.artifactModalCopy}>
+              <span>{String((artifactActive ?? 0) + 1).padStart(2, "0")} / {String(artifactAtlas.length).padStart(2, "0")}</span>
+              <p>{activeArtifact.eyebrow}</p>
+              <h3>{activeArtifact.title}</h3>
+              <p>{activeArtifact.text}</p>
+              <small>{t("数字艺术设定 · 非文物实拍")}</small>
+              <div>
+                <button type="button" onClick={() => stepArtifact(-1)} aria-label={t("上一件")}>
+                  <ChevronLeft size={21} aria-hidden="true" />
+                </button>
+                <button type="button" onClick={() => stepArtifact(1)} aria-label={t("下一件")}>
+                  <ChevronRight size={21} aria-hidden="true" />
+                </button>
+              </div>
+            </aside>
+          </div>
+        </div>
+      ) : null}
 
       {filmOpen ? (
         <div
