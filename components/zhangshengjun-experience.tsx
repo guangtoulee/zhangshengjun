@@ -39,14 +39,15 @@ import {
   translate,
   type SiteLocale,
 } from "@/content/zhangshengjun-i18n";
+import BrandSymbol from "./brand-symbol";
 import styles from "./zhangshengjun-experience.module.css";
 
 const navItemsSource = [
-  { label: "圣境方壶", href: "#fanghu" },
-  { label: "千年神公", href: "#legend" },
-  { label: "法相非遗", href: "#heritage" },
-  { label: "万香归宗", href: "#global" },
-  { label: "影音文库", href: "#media" },
+  { label: "神公传奇", href: "/legend" },
+  { label: "闾山法脉", href: "/lushan" },
+  { label: "文化资讯", href: "/news" },
+  { label: "影音馆", href: "/videos" },
+  { label: "文创计划", href: "/shop" },
 ];
 
 const heroStatsSource = [
@@ -399,7 +400,7 @@ function resetParallax(event: PointerEvent<HTMLElement>) {
 function BrandMark() {
   return (
     <span className={styles.brandMark} aria-hidden="true">
-      <span>法</span>
+      <BrandSymbol />
     </span>
   );
 }
@@ -444,9 +445,13 @@ function MoreDetails({ children, label = "展开深读" }: { children: ReactNode
 }
 
 export default function ZhangShengJunExperience({ locale = "zh-cn" }: { locale?: SiteLocale }) {
+  const localePrefix = locale === "zh-cn" ? "" : `/${locale}`;
   const content = useMemo(
     () => ({
-      navItems: localizeRecords(navItemsSource, locale),
+      navItems: localizeRecords(navItemsSource, locale).map((item) => ({
+        ...item,
+        href: `${localePrefix}${item.href}`,
+      })),
       heroStats: localizeRows(heroStatsSource, locale),
       heroScenes: localizeRecords(heroScenesSource, locale),
       originSites: localizeRecords(originSitesSource, locale),
@@ -459,7 +464,7 @@ export default function ZhangShengJunExperience({ locale = "zh-cn" }: { locale?:
       ritualSteps: localizeRows(ritualStepsSource, locale),
       artifactAtlas: localizeRecords(artifactAtlasSource, locale),
     }),
-    [locale],
+    [locale, localePrefix],
   );
   const {
     navItems,
@@ -676,7 +681,7 @@ export default function ZhangShengJunExperience({ locale = "zh-cn" }: { locale?:
       </div>
 
       <header className={`${styles.header} ${headerCompact ? styles.headerCompact : ""}`}>
-        <a className={styles.brand} href="#home" aria-label={t("返回首页")}>
+        <a className={styles.brand} href={`${localePrefix}/`} aria-label={t("返回首页")}>
           <BrandMark />
           <span className={styles.brandType}>
             <strong>{t("永泰方壶岩")}</strong>
@@ -707,7 +712,7 @@ export default function ZhangShengJunExperience({ locale = "zh-cn" }: { locale?:
               </a>
             ))}
           </nav>
-          <a className={styles.headerAction} href="#media">
+          <a className={styles.headerAction} href={`${localePrefix}/videos`}>
             <CirclePlay size={17} aria-hidden="true" />
             {t("法主视界")}
           </a>

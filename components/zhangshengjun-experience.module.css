@@ -153,42 +153,18 @@
   flex: 0 0 auto;
   display: grid;
   place-items: center;
-  color: #fff3ce;
-  background:
-    linear-gradient(145deg, rgba(222, 127, 75, 0.22), transparent 48%),
-    var(--cinnabar);
-  border: 1px solid rgba(241, 210, 138, 0.82);
-  clip-path: polygon(14% 0, 86% 0, 100% 14%, 100% 86%, 86% 100%, 14% 100%, 0 86%, 0 14%);
+  color: #f4d99b;
+  background: rgba(23, 41, 33, 0.66);
+  border: 1px solid rgba(244, 217, 155, 0.52);
+  border-radius: 50%;
   box-shadow:
-    inset 0 0 0 4px rgba(75, 23, 18, 0.48),
+    inset 0 0 0 4px rgba(7, 20, 15, 0.34),
     0 14px 30px rgba(0, 0, 0, 0.24);
 }
 
-.brandMark::before,
-.brandMark::after {
-  position: absolute;
-  content: "";
-  pointer-events: none;
-}
-
-.brandMark::before {
-  inset: 7px;
-  border: 1px solid rgba(255, 243, 206, 0.48);
-}
-
-.brandMark::after {
-  width: 31px;
-  height: 1px;
-  transform: rotate(-34deg);
-  background: rgba(255, 243, 206, 0.36);
-}
-
-.brandMark span {
-  position: relative;
-  z-index: 1;
-  font-size: 1.45rem;
-  font-weight: 900;
-  line-height: 1;
+.brandMark svg {
+  width: 34px;
+  height: 34px;
 }
 
 .brandType {

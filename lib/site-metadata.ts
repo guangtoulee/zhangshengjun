@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import type { SiteLocale } from "@/content/zhangshengjun-i18n";
+import type { ContentPage } from "@/lib/platform-content";
 
-const metadataByLocale: Record<
+export const SITE_URL = "https://www.zhangshengjun.org";
+export const SITE_UPDATED_AT = new Date("2026-07-30T00:00:00+08:00");
+
+export const metadataByLocale: Record<
   SiteLocale,
   {
     path: string;
@@ -53,6 +57,10 @@ const languageAlternates = {
   "x-default": "/",
 };
 
+function absoluteUrl(path: string) {
+  return new URL(path, SITE_URL).toString();
+}
+
 export function createSiteMetadata(locale: SiteLocale): Metadata {
   const copy = metadataByLocale[locale];
   const alternateLocales = Object.values(metadataByLocale)
@@ -93,4 +101,136 @@ export function createSiteMetadata(locale: SiteLocale): Metadata {
       images: ["/zhangshengjun/fanghu-hero.jpg"],
     },
   };
+}
+
+export function createContentMetadata(page: ContentPage): Metadata {
+  const localizedPaths = {
+    "zh-CN": `/${page.slug}`,
+    "zh-Hant": `/zh-hant/${page.slug}`,
+    en: `/en/${page.slug}`,
+    "x-default": `/${page.slug}`,
+  };
+  const path = page.locale === "zh-cn" ? `/${page.slug}` : `/${page.locale}/${page.slug}`;
+  const siteCopy = metadataByLocale[page.locale];
+
+  return {
+    title: `${page.title} | ${siteCopy.siteName}`,
+    description: page.description,
+    alternates: {
+      canonical: path,
+      languages: localizedPaths,
+    },
+    openGraph: {
+      type: "article",
+      locale: siteCopy.locale,
+      url: path,
+      siteName: siteCopy.siteName,
+      title: page.title,
+      description: page.description,
+      images: [
+        {
+          url: page.heroImage,
+          width: 1600,
+          height: 1000,
+          alt: page.heroAlt,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: page.title,
+      description: page.description,
+      images: [page.heroImage],
+    },
+  };
+}
+
+export function createOrganizationJsonLd(locale: SiteLocale) {
+  const copy = metadataByLocale[locale];
+  return {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": `${SITE_URL}/#organization`,
+    name: copy.siteName,
+    url: SITE_URL,
+    logo: absoluteUrl("/icon.svg"),
+    description: copy.description,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: locale === "en" ? "Yongtai County, Fuzhou" : "福州市永泰县",
+      addressRegion: locale === "en" ? "Fujian" : "福建省",
+      addressCountry: "CN",
+    },
+  };
+}
+
+export function createWebsiteJsonLd(locale: SiteLocale) {
+  const copy = metadataByLocale[locale];
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${SITE_URL}/#website`,
+    url: SITE_URL,
+    name: copy.siteName,
+    description: copy.description,
+    inLanguage: locale === "zh-cn" ? "zh-CN" : locale === "zh-hant" ? "zh-Hant" : "en",
+    publisher: { "@id": `${SITE_URL}/#organization` },
+  };
+}
+
+export function createContentJsonLd(page: ContentPage) {
+  const path = page.locale === "zh-cn" ? `/${page.slug}` : `/${page.locale}/${page.slug}`;
+  const url = absoluteUrl(path);
+  const homePath = page.locale === "zh-cn" ? "/" : `/${page.locale}`;
+  const schemas: Record<string, unknown>[] = [
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "@id": `${url}#page`,
+      url,
+      name: page.title,
+      description: page.description,
+      inLanguage: page.htmlLang,
+      dateModified: "2026-07-30",
+      isPartOf: { "@id": `${SITE_URL}/#website` },
+      primaryImageOfPage: {
+        "@type": "ImageObject",
+        url: absoluteUrl(page.heroImage),
+      },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: page.locale === "en" ? "Home" : page.locale === "zh-hant" ? "首頁" : "首页",
+          item: absoluteUrl(homePath),
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: page.navLabel,
+          item: url,
+        },
+      ],
+    },
+  ];
+
+  if (page.video) {
+    schemas.push({
+      "@context": "https://schema.org",
+      "@type": "VideoObject",
+      name: page.video.name,
+      description: page.video.description,
+      thumbnailUrl: [absoluteUrl(page.video.thumbnailUrl)],
+      uploadDate: page.video.uploadDate,
+      duration: page.video.duration,
+      contentUrl: absoluteUrl(page.video.contentUrl),
+      inLanguage: page.htmlLang,
+    });
+  }
+
+  return schemas;
 }

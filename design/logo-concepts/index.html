@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>永泰方壶岩 · 标志方向提案</title>
+    <style>
+      :root {
+        --ink: #12201b;
+        --paper: #f2eee3;
+        --paper-deep: #e8e0cf;
+        --forest: #0b211a;
+        --forest-soft: #173a2e;
+        --cinnabar: #8f2f20;
+        --cinnabar-deep: #651d17;
+        --gold: #d9b56d;
+        --gold-pale: #f1d79a;
+        --stone: #8f948b;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        background:
+          linear-gradient(rgba(15, 39, 30, 0.045) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(15, 39, 30, 0.045) 1px, transparent 1px),
+          var(--paper);
+        background-size: 28px 28px;
+        font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+      }
+
+      .page {
+        width: min(1480px, calc(100% - 72px));
+        margin: 0 auto;
+        padding: 68px 0 88px;
+      }
+
+      .intro {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 430px;
+        gap: 64px;
+        align-items: end;
+        padding-bottom: 42px;
+        border-bottom: 1px solid rgba(18, 32, 27, 0.22);
+      }
+
+      .kicker,
+      .number,
+      .traits,
+      .scale-label {
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .kicker {
+        margin: 0 0 18px;
+        color: var(--cinnabar);
+        font-size: 13px;
+        font-weight: 800;
+      }
+
+      h1 {
+        max-width: 790px;
+        margin: 0;
+        font-family: "Songti SC", "STSong", serif;
+        font-size: clamp(50px, 5.2vw, 78px);
+        font-weight: 800;
+        line-height: 1.08;
+      }
+
+      .intro-note {
+        margin: 0;
+        color: rgba(18, 32, 27, 0.7);
+        font-family: "Songti SC", "STSong", serif;
+        font-size: 20px;
+        line-height: 1.75;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 24px;
+        margin-top: 28px;
+      }
+
+      .concept {
+        min-width: 0;
+        overflow: hidden;
+        border: 1px solid rgba(18, 32, 27, 0.2);
+        background: rgba(249, 246, 237, 0.88);
+      }
+
+      .concept-head {
+        min-height: 120px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 28px 30px 24px;
+      }
+
+      .number {
+        margin: 0 0 8px;
+        color: var(--cinnabar);
+        font-family: Georgia, serif;
+        font-size: 12px;
+        font-weight: 800;
+      }
+
+      h2 {
+        margin: 0;
+        font-family: "Songti SC", "STSong", serif;
+        font-size: 30px;
+        line-height: 1.16;
+      }
+
+      .traits {
+        margin: 8px 0 0;
+        color: rgba(18, 32, 27, 0.56);
+        font-size: 10px;
+        font-weight: 800;
+      }
+
+      .recommended {
+        flex: 0 0 auto;
+        padding: 7px 10px;
+        color: #fff5d8;
+        background: var(--cinnabar);
+        font-size: 11px;
+        font-weight: 800;
+      }
+
+      .symbol-stage {
+        min-height: 398px;
+        display: grid;
+        place-items: center;
+        padding: 44px;
+        background: var(--forest);
+        border-top: 1px solid rgba(18, 32, 27, 0.2);
+        border-bottom: 1px solid rgba(18, 32, 27, 0.2);
+      }
+
+      .symbol-stage.light {
+        background: var(--paper-deep);
+      }
+
+      .lockup {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+      }
+
+      .lockup-copy {
+        display: grid;
+        min-width: 260px;
+      }
+
+      .lockup-copy strong {
+        color: #fff4d1;
+        font-family: "Songti SC", "STSong", serif;
+        font-size: 34px;
+        line-height: 1.1;
+      }
+
+      .light .lockup-copy strong {
+        color: var(--ink);
+      }
+
+      .lockup-copy span {
+        margin-top: 9px;
+        color: rgba(255, 244, 209, 0.66);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+      }
+
+      .light .lockup-copy span {
+        color: rgba(18, 32, 27, 0.58);
+      }
+
+      .mark-large {
+        width: 146px;
+        height: 146px;
+        flex: 0 0 auto;
+      }
+
+      .usage {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 200px;
+        min-height: 118px;
+      }
+
+      .header-demo {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        padding: 22px 24px;
+        color: #fff1ce;
+        background: #081712;
+      }
+
+      .mark-small {
+        width: 48px;
+        height: 48px;
+        flex: 0 0 auto;
+      }
+
+      .header-demo strong,
+      .header-demo span {
+        display: block;
+      }
+
+      .header-demo strong {
+        font-family: "Songti SC", "STSong", serif;
+        font-size: 15px;
+      }
+
+      .header-demo span {
+        margin-top: 4px;
+        color: rgba(255, 241, 206, 0.57);
+        font-size: 8px;
+        letter-spacing: 0.06em;
+      }
+
+      .scale-note {
+        display: grid;
+        place-content: center;
+        padding: 18px;
+        color: rgba(18, 32, 27, 0.64);
+        background: #efe8d8;
+        text-align: center;
+      }
+
+      .scale-note strong {
+        color: var(--cinnabar);
+        font-family: Georgia, serif;
+        font-size: 27px;
+      }
+
+      .scale-label {
+        margin-top: 4px;
+        font-size: 9px;
+        font-weight: 800;
+      }
+
+      .concept-foot {
+        min-height: 98px;
+        margin: 0;
+        padding: 22px 30px 25px;
+        color: rgba(18, 32, 27, 0.7);
+        font-family: "Songti SC", "STSong", serif;
+        font-size: 15px;
+        line-height: 1.65;
+      }
+
+      @media (max-width: 980px) {
+        .page {
+          width: min(720px, calc(100% - 28px));
+          padding-top: 38px;
+        }
+
+        .intro,
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        .intro {
+          gap: 22px;
+        }
+
+        .lockup {
+          gap: 18px;
+        }
+
+        .mark-large {
+          width: 112px;
+          height: 112px;
+        }
+
+        .lockup-copy {
+          min-width: 0;
+        }
+
+        .lockup-copy strong {
+          font-size: 25px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <header class="intro">
+        <div>
+          <p class="kicker">Fanghu Mother Temple · Visual Identity Study 01</p>
+          <h1>永泰方壶岩<br />标志方向提案</h1>
+        </div>
+        <p class="intro-note">四套均以“方壶山岩、法脉、飞瀑与母殿”为母题，并以导航栏实际尺寸检验识别度。标志先建立正统感，再谈装饰。</p>
+      </header>
+
+      <section class="grid">
+        <article class="concept">
+          <div class="concept-head">
+            <div>
+              <p class="number">Direction 01</p>
+              <h2>方壶法印</h2>
+              <p class="traits">Official · Ancestral · Enduring</p>
+            </div>
+            <span class="recommended">推荐方向</span>
+          </div>
+          <div class="symbol-stage">
+            <div class="lockup">
+              <svg class="mark-large" viewBox="0 0 160 160" role="img" aria-label="方壶法印">
+                <path d="M25 7h110l18 18v110l-18 18H25L7 135V25Z" fill="#8f2f20" stroke="#d9b56d" stroke-width="3" />
+                <path d="M30 14h100l16 16v100l-16 16H30l-16-16V30Z" fill="none" stroke="#f1d79a" stroke-opacity=".5" />
+                <path d="M24 58 50 38l18 13 15-22 28 28 16-13 15 14" fill="none" stroke="#f1d79a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M124 46v64c0 12-7 19-16 27" fill="none" stroke="#f1d79a" stroke-width="4" stroke-linecap="round" />
+                <circle cx="124" cy="119" r="3" fill="#f1d79a" />
+                <text x="68" y="111" fill="#fff4d1" font-family="STSong, Songti SC, serif" font-size="63" font-weight="800" text-anchor="middle">法</text>
+              </svg>
+              <div class="lockup-copy">
+                <strong>永泰方壶岩</strong>
+                <span>张圣君母殿 · FANGHU MOTHER TEMPLE</span>
+              </div>
+            </div>
+          </div>
+          <div class="usage">
+            <div class="header-demo">
+              <svg class="mark-small" viewBox="0 0 160 160" aria-hidden="true">
+                <path d="M25 7h110l18 18v110l-18 18H25L7 135V25Z" fill="#8f2f20" stroke="#d9b56d" stroke-width="4" />
+                <path d="M24 58 50 38l18 13 15-22 28 28 16-13 15 14M124 46v68" fill="none" stroke="#f1d79a" stroke-width="5" stroke-linecap="round" />
+                <text x="68" y="111" fill="#fff4d1" font-family="STSong, Songti SC, serif" font-size="63" font-weight="800" text-anchor="middle">法</text>
+              </svg>
+              <div><strong>永泰方壶岩</strong><span>张圣君母殿 · FANGHU MOTHER TEMPLE</span></div>
+            </div>
+            <div class="scale-note"><strong>48</strong><span class="scale-label">Pixel test</span></div>
+          </div>
+          <p class="concept-foot">八角法印承担“祖庭正统”，上沿山脊与右侧飞瀑把方壶岩地貌嵌入印章；最适合官网、牌匾、印刷与正式交流场景。</p>
+        </article>
+
+        <article class="concept">
+          <div class="concept-head">
+            <div>
+              <p class="number">Direction 02</p>
+              <h2>五雷山徽</h2>
+              <p class="traits">Contemporary · Global · Ceremonial</p>
+            </div>
+          </div>
+          <div class="symbol-stage light">
+            <div class="lockup">
+              <svg class="mark-large" viewBox="0 0 160 160" role="img" aria-label="五雷山徽">
+                <circle cx="80" cy="80" r="70" fill="#112c23" stroke="#a77e38" stroke-width="3" />
+                <circle cx="80" cy="80" r="59" fill="none" stroke="#d9b56d" stroke-opacity=".48" />
+                <path d="m29 73 25-21 17 14 18-30 39 37" fill="none" stroke="#f1d79a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M97 51v48c0 13-8 22-20 31" fill="none" stroke="#f1d79a" stroke-width="5" stroke-linecap="round" />
+                <path d="m47 36-8-12m26 4-3-15m22 14 3-16m18 24 10-12m3 31 15-6" stroke="#8f2f20" stroke-width="4" stroke-linecap="round" />
+                <text x="52" y="114" fill="#f1d79a" font-family="STSong, Songti SC, serif" font-size="25" font-weight="800">方壶</text>
+              </svg>
+              <div class="lockup-copy">
+                <strong>永泰方壶岩</strong>
+                <span>ZHANG SHENGJUN · MOTHER TEMPLE</span>
+              </div>
+            </div>
+          </div>
+          <div class="usage">
+            <div class="header-demo">
+              <svg class="mark-small" viewBox="0 0 160 160" aria-hidden="true">
+                <circle cx="80" cy="80" r="70" fill="#112c23" stroke="#d9b56d" stroke-width="5" />
+                <path d="m29 73 25-21 17 14 18-30 39 37M97 51v50c0 12-8 21-20 29" fill="none" stroke="#f1d79a" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="m47 36-8-12m26 4-3-15m22 14 3-16m18 24 10-12m3 31 15-6" stroke="#8f2f20" stroke-width="5" stroke-linecap="round" />
+              </svg>
+              <div><strong>永泰方壶岩</strong><span>ZHANG SHENGJUN · MOTHER TEMPLE</span></div>
+            </div>
+            <div class="scale-note"><strong>48</strong><span class="scale-label">Pixel test</span></div>
+          </div>
+          <p class="concept-foot">圆形徽章更现代，五道朱砂雷痕围绕方壶山与飞瀑，海外社交头像和视频片头识别度最高，但传统牌匾气质稍弱。</p>
+        </article>
+
+        <article class="concept">
+          <div class="concept-head">
+            <div>
+              <p class="number">Direction 03</p>
+              <h2>方壶岩门</h2>
+              <p class="traits">Landscape · Architectural · Quiet</p>
+            </div>
+          </div>
+          <div class="symbol-stage light">
+            <div class="lockup">
+              <svg class="mark-large" viewBox="0 0 160 160" role="img" aria-label="方壶岩门">
+                <path d="M22 144V63L47 20h66l25 43v81Z" fill="#16261f" />
+                <path d="M38 144V72L56 39h48l18 33v72Z" fill="#e8e0cf" />
+                <path d="m38 72 25-20 17 13 17-27 25 34" fill="#8f2f20" />
+                <path d="M94 45v60c0 15-9 24-25 34" fill="none" stroke="#a77e38" stroke-width="6" stroke-linecap="round" />
+                <path d="M15 144h130" stroke="#8f2f20" stroke-width="5" stroke-linecap="square" />
+                <circle cx="94" cy="115" r="4" fill="#a77e38" />
+              </svg>
+              <div class="lockup-copy">
+                <strong>永泰方壶岩</strong>
+                <span>山门之上 · 法源之地 · 母殿之始</span>
+              </div>
+            </div>
+          </div>
+          <div class="usage">
+            <div class="header-demo">
+              <svg class="mark-small" viewBox="0 0 160 160" aria-hidden="true">
+                <path d="M22 144V63L47 20h66l25 43v81Z" fill="#d9b56d" />
+                <path d="M38 144V72L56 39h48l18 33v72Z" fill="#081712" />
+                <path d="m38 72 25-20 17 13 17-27 25 34" fill="#8f2f20" />
+                <path d="M94 45v60c0 15-9 24-25 34" fill="none" stroke="#f1d79a" stroke-width="8" stroke-linecap="round" />
+              </svg>
+              <div><strong>永泰方壶岩</strong><span>山门之上 · 法源之地 · 母殿之始</span></div>
+            </div>
+            <div class="scale-note"><strong>48</strong><span class="scale-label">Pixel test</span></div>
+          </div>
+          <p class="concept-foot">用山门负形包住方壶山与瀑布，不依赖“法”字也能成立，克制、建筑感强；适合文化旅游与空间导视体系。</p>
+        </article>
+
+        <article class="concept">
+          <div class="concept-head">
+            <div>
+              <p class="number">Direction 04</p>
+              <h2>法索金章</h2>
+              <p class="traits">Ritual · Folk · Distinctive</p>
+            </div>
+          </div>
+          <div class="symbol-stage">
+            <div class="lockup">
+              <svg class="mark-large" viewBox="0 0 160 160" role="img" aria-label="法索金章">
+                <circle cx="80" cy="80" r="63" fill="#7b281d" />
+                <circle cx="80" cy="80" r="70" fill="none" stroke="#b78b45" stroke-width="9" stroke-dasharray="3 5" stroke-linecap="round" />
+                <circle cx="80" cy="80" r="55" fill="none" stroke="#f1d79a" stroke-opacity=".58" stroke-width="2" />
+                <path d="M80 12v26M80 122v26" stroke="#d9b56d" stroke-width="5" stroke-linecap="round" />
+                <path d="m72 25 8-14 8 14M67 137l13 12 13-12" fill="none" stroke="#d9b56d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                <text x="80" y="105" fill="#fff4d1" font-family="STSong, Songti SC, serif" font-size="67" font-weight="800" text-anchor="middle">法</text>
+                <circle cx="126" cy="122" r="7" fill="#112c23" stroke="#d9b56d" stroke-width="3" />
+              </svg>
+              <div class="lockup-copy">
+                <strong>永泰方壶岩</strong>
+                <span>闾山法主 · 张圣君母殿</span>
+              </div>
+            </div>
+          </div>
+          <div class="usage">
+            <div class="header-demo">
+              <svg class="mark-small" viewBox="0 0 160 160" aria-hidden="true">
+                <circle cx="80" cy="80" r="61" fill="#7b281d" />
+                <circle cx="80" cy="80" r="70" fill="none" stroke="#d9b56d" stroke-width="10" stroke-dasharray="3 6" stroke-linecap="round" />
+                <text x="80" y="105" fill="#fff4d1" font-family="STSong, Songti SC, serif" font-size="68" font-weight="800" text-anchor="middle">法</text>
+                <circle cx="126" cy="122" r="8" fill="#112c23" stroke="#d9b56d" stroke-width="4" />
+              </svg>
+              <div><strong>永泰方壶岩</strong><span>闾山法主 · 张圣君母殿</span></div>
+            </div>
+            <div class="scale-note"><strong>48</strong><span class="scale-label">Pixel test</span></div>
+          </div>
+          <p class="concept-foot">麻蛇法索化成绳结外环，剑轴贯穿“法”字，宗教辨识最强、民俗气息最浓；适合庆诞、仪式影像与文创印章。</p>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>

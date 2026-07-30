@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>张圣君抽象标志方向</title>
+    <style>
+      :root {
+        --ink: #071710;
+        --ink-soft: #10271e;
+        --paper: #f2eee4;
+        --paper-deep: #e6dece;
+        --red: #9b3523;
+        --gold: #ddb96f;
+        --gold-pale: #f3d997;
+        --line: rgba(7, 23, 16, 0.2);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        background:
+          linear-gradient(rgba(7, 23, 16, 0.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(7, 23, 16, 0.04) 1px, transparent 1px),
+          var(--paper);
+        background-size: 32px 32px;
+        font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+      }
+
+      .page {
+        width: min(1480px, calc(100% - 72px));
+        margin: 0 auto;
+        padding: 64px 0 80px;
+      }
+
+      .intro {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 480px;
+        gap: 64px;
+        align-items: end;
+        padding-bottom: 38px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .eyebrow,
+      .direction,
+      .traits,
+      .scale-label {
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .eyebrow {
+        margin: 0 0 18px;
+        color: var(--red);
+        font-size: 12px;
+        font-weight: 900;
+      }
+
+      h1 {
+        margin: 0;
+        font-family: "Songti SC", "STSong", serif;
+        font-size: clamp(54px, 5.4vw, 82px);
+        font-weight: 800;
+        line-height: 1.05;
+      }
+
+      .intro p:last-child {
+        margin: 0;
+        color: rgba(7, 23, 16, 0.7);
+        font-family: "Songti SC", "STSong", serif;
+        font-size: 19px;
+        line-height: 1.75;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 24px;
+        margin-top: 28px;
+      }
+
+      .concept {
+        overflow: hidden;
+        border: 1px solid var(--line);
+        background: rgba(249, 246, 238, 0.9);
+      }
+
+      .concept-head {
+        min-height: 112px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 25px 29px;
+      }
+
+      .direction {
+        margin: 0 0 7px;
+        color: var(--red);
+        font-family: Georgia, serif;
+        font-size: 11px;
+        font-weight: 900;
+      }
+
+      h2 {
+        margin: 0;
+        font-family: "Songti SC", "STSong", serif;
+        font-size: 29px;
+        line-height: 1.12;
+      }
+
+      .traits {
+        margin: 8px 0 0;
+        color: rgba(7, 23, 16, 0.52);
+        font-size: 9px;
+        font-weight: 900;
+      }
+
+      .tag {
+        padding: 7px 10px;
+        color: #fff5d8;
+        background: var(--red);
+        font-size: 10px;
+        font-weight: 900;
+      }
+
+      .stage {
+        min-height: 408px;
+        display: grid;
+        place-items: center;
+        background: var(--ink);
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+      }
+
+      .stage.paper {
+        background: var(--paper-deep);
+      }
+
+      .stage.red {
+        background: var(--red);
+      }
+
+      .symbol {
+        width: 210px;
+        height: 210px;
+      }
+
+      .tests {
+        display: grid;
+        grid-template-columns: 1fr 1fr 156px;
+        min-height: 104px;
+      }
+
+      .test {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 21px 24px;
+        background: var(--ink);
+      }
+
+      .test.paper {
+        background: var(--paper-deep);
+      }
+
+      .test svg {
+        width: 48px;
+        height: 48px;
+        flex: 0 0 auto;
+      }
+
+      .test strong,
+      .test small {
+        display: block;
+      }
+
+      .test strong {
+        color: #f8e8bc;
+        font-family: "Songti SC", "STSong", serif;
+        font-size: 14px;
+      }
+
+      .test small {
+        margin-top: 4px;
+        color: rgba(248, 232, 188, 0.54);
+        font-size: 8px;
+        letter-spacing: 0.08em;
+      }
+
+      .test.paper strong {
+        color: var(--ink);
+      }
+
+      .test.paper small {
+        color: rgba(7, 23, 16, 0.5);
+      }
+
+      .scale {
+        display: grid;
+        place-content: center;
+        color: rgba(7, 23, 16, 0.58);
+        background: #ece4d4;
+        text-align: center;
+      }
+
+      .scale strong {
+        color: var(--red);
+        font-family: Georgia, serif;
+        font-size: 25px;
+      }
+
+      .scale-label {
+        margin-top: 3px;
+        font-size: 8px;
+        font-weight: 900;
+      }
+
+      .note {
+        min-height: 95px;
+        margin: 0;
+        padding: 21px 29px 24px;
+        color: rgba(7, 23, 16, 0.68);
+        font-family: "Songti SC", "STSong", serif;
+        font-size: 14px;
+        line-height: 1.65;
+      }
+
+      @media (max-width: 980px) {
+        .page {
+          width: min(720px, calc(100% - 28px));
+          padding-top: 36px;
+        }
+
+        .intro,
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        .intro {
+          gap: 22px;
+        }
+
+        .tests {
+          grid-template-columns: 1fr 120px;
+        }
+
+        .test:nth-child(2) {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <header class="intro">
+        <div>
+          <p class="eyebrow">Zhang Shengjun · Symbol Study 02</p>
+          <h1>无字抽象标志<br />四个新方向</h1>
+        </div>
+        <p>不再描绘寺院或地名。符号只提炼法剑、麻蛇法索、五雷、披发与神目，并同时检验单色、反白和 48 像素导航尺寸。</p>
+      </header>
+
+      <section class="grid">
+        <article class="concept">
+          <div class="concept-head">
+            <div>
+              <p class="direction">Direction 01</p>
+              <h2>雷索</h2>
+              <p class="traits">Sword · Serpent · Five Thunder</p>
+            </div>
+            <span class="tag">主推</span>
+          </div>
+          <div class="stage">
+            <svg class="symbol" viewBox="0 0 200 200" role="img" aria-label="雷索抽象标志">
+              <path d="M107 20c37 4 65 36 63 74-2 43-37 75-78 74-37-1-65-27-65-62 0-31 22-55 52-59" fill="none" stroke="#e0bb70" stroke-width="12" stroke-linecap="round" />
+              <path d="m79 47 9-18 12 16 12-22 11 21 14-14 6 21" fill="none" stroke="#9b3523" stroke-width="7" stroke-linecap="square" stroke-linejoin="miter" />
+              <path d="M100 31 83 66h11v67l6 31 6-31V66h11Z" fill="#f4db9a" />
+              <path d="m150 141 21 9-17 16-9-9Z" fill="#e0bb70" />
+              <circle cx="157" cy="151" r="3" fill="#071710" />
+            </svg>
+          </div>
+          <div class="tests">
+            <div class="test">
+              <svg viewBox="0 0 200 200" aria-hidden="true">
+                <path d="M107 20c37 4 65 36 63 74-2 43-37 75-78 74-37-1-65-27-65-62 0-31 22-55 52-59" fill="none" stroke="#e0bb70" stroke-width="14" stroke-linecap="round" />
+                <path d="m79 47 9-18 12 16 12-22 11 21 14-14 6 21" fill="none" stroke="#9b3523" stroke-width="9" />
+                <path d="M100 31 83 66h11v67l6 31 6-31V66h11Z" fill="#f4db9a" />
+              </svg>
+              <div><strong>张圣君文化</strong><small>ZHANG SHENGJUN</small></div>
+            </div>
+            <div class="test paper">
+              <svg viewBox="0 0 200 200" aria-hidden="true">
+                <path d="M107 20c37 4 65 36 63 74-2 43-37 75-78 74-37-1-65-27-65-62 0-31 22-55 52-59" fill="none" stroke="#071710" stroke-width="14" stroke-linecap="round" />
+                <path d="m79 47 9-18 12 16 12-22 11 21 14-14 6 21" fill="none" stroke="#071710" stroke-width="9" />
+                <path d="M100 31 83 66h11v67l6 31 6-31V66h11Z" fill="#071710" />
+              </svg>
+              <div><strong>单色印记</strong><small>ONE-COLOR TEST</small></div>
+            </div>
+            <div class="scale"><strong>48</strong><span class="scale-label">Pixel test</span></div>
+          </div>
+          <p class="note">法索形成未闭合的护法环，蛇首藏于末端；中心负形是法剑，顶部五道折线是五雷。识别最完整，也最适合做片头旋转与雷光动效。</p>
+        </article>
+
+        <article class="concept">
+          <div class="concept-head">
+            <div>
+              <p class="direction">Direction 02</p>
+              <h2>神目</h2>
+              <p class="traits">Dark Face · Eyes · Flowing Hair</p>
+            </div>
+          </div>
+          <div class="stage red">
+            <svg class="symbol" viewBox="0 0 200 200" role="img" aria-label="神目抽象标志">
+              <path d="M49 32C24 52 22 87 39 109c-13 17-9 42 12 57M151 32c25 20 27 55 10 77 13 17 9 42-12 57" fill="none" stroke="#f4db9a" stroke-width="10" stroke-linecap="round" />
+              <path d="M63 50C50 69 51 93 67 108c-11 13-8 31 6 42M137 50c13 19 12 43-4 58 11 13 8 31-6 42" fill="none" stroke="#f4db9a" stroke-width="7" stroke-linecap="round" />
+              <circle cx="100" cy="45" r="11" fill="none" stroke="#071710" stroke-width="7" />
+              <path d="M60 89c13-14 29-15 40 0-11 16-27 17-40 0Zm40 0c11-15 27-14 40 0-13 17-29 16-40 0Z" fill="#071710" />
+              <circle cx="82" cy="89" r="5" fill="#f4db9a" />
+              <circle cx="118" cy="89" r="5" fill="#f4db9a" />
+              <path d="M100 59v92m-15-14 15 18 15-18" fill="none" stroke="#071710" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <div class="tests">
+            <div class="test">
+              <svg viewBox="0 0 200 200" aria-hidden="true">
+                <path d="M49 32C24 52 22 87 39 109c-13 17-9 42 12 57M151 32c25 20 27 55 10 77 13 17 9 42-12 57M63 50C50 69 51 93 67 108c-11 13-8 31 6 42M137 50c13 19 12 43-4 58 11 13 8 31-6 42" fill="none" stroke="#f4db9a" stroke-width="9" stroke-linecap="round" />
+                <circle cx="100" cy="45" r="11" fill="none" stroke="#9b3523" stroke-width="8" />
+                <path d="M60 89c13-14 29-15 40 0-11 16-27 17-40 0Zm40 0c11-15 27-14 40 0-13 17-29 16-40 0Z" fill="#f4db9a" />
+                <path d="M100 59v92m-15-14 15 18 15-18" fill="none" stroke="#f4db9a" stroke-width="8" />
+              </svg>
+              <div><strong>张圣君文化</strong><small>ZHANG SHENGJUN</small></div>
+            </div>
+            <div class="test paper">
+              <svg viewBox="0 0 200 200" aria-hidden="true">
+                <path d="M49 32C24 52 22 87 39 109c-13 17-9 42 12 57M151 32c25 20 27 55 10 77 13 17 9 42-12 57M63 50C50 69 51 93 67 108c-11 13-8 31 6 42M137 50c13 19 12 43-4 58 11 13 8 31-6 42" fill="none" stroke="#071710" stroke-width="9" stroke-linecap="round" />
+                <circle cx="100" cy="45" r="11" fill="none" stroke="#071710" stroke-width="8" />
+                <path d="M60 89c13-14 29-15 40 0-11 16-27 17-40 0Zm40 0c11-15 27-14 40 0-13 17-29 16-40 0Z" fill="#071710" />
+                <path d="M100 59v92m-15-14 15 18 15-18" fill="none" stroke="#071710" stroke-width="8" />
+              </svg>
+              <div><strong>单色印记</strong><small>ONE-COLOR TEST</small></div>
+            </div>
+            <div class="scale"><strong>48</strong><span class="scale-label">Pixel test</span></div>
+          </div>
+          <p class="note">用圆眼、额前隆起、披发和向下法剑构成近似面具的神目。人物识别最强、最有神性，但气质更锋利，适合年轻化内容与数字藏品。</p>
+        </article>
+
+        <article class="concept">
+          <div class="concept-head">
+            <div>
+              <p class="direction">Direction 03</p>
+              <h2>五雷</h2>
+              <p class="traits">Thunder · Authority · Motion</p>
+            </div>
+          </div>
+          <div class="stage paper">
+            <svg class="symbol" viewBox="0 0 200 200" role="img" aria-label="五雷抽象标志">
+              <path d="m100 18 15 35-15 18-15-18Zm55 25-5 37-22 8-7-22Zm25 52-25 28-23-3 1-23Zm-20 59-37-5-9-22 22-8Zm-61 28-29-25 3-23 23 1Zm-59-21 5-37 22-9 8 22ZM18 101l25-29 23 3-1 23Zm22-60 37 5 9 22-22 8Z" fill="#071710" />
+              <circle cx="100" cy="101" r="43" fill="#9b3523" />
+              <path d="m100 63-15 30h11v42h8V93h11Z" fill="#f4db9a" />
+              <path d="M72 108c13 14 43 14 56 0" fill="none" stroke="#f4db9a" stroke-width="7" stroke-linecap="round" />
+            </svg>
+          </div>
+          <div class="tests">
+            <div class="test">
+              <svg viewBox="0 0 200 200" aria-hidden="true">
+                <path d="m100 18 15 35-15 18-15-18Zm55 25-5 37-22 8-7-22Zm25 52-25 28-23-3 1-23Zm-20 59-37-5-9-22 22-8Zm-61 28-29-25 3-23 23 1Zm-59-21 5-37 22-9 8 22ZM18 101l25-29 23 3-1 23Zm22-60 37 5 9 22-22 8Z" fill="#f4db9a" />
+                <circle cx="100" cy="101" r="43" fill="#9b3523" />
+                <path d="m100 63-15 30h11v42h8V93h11Z" fill="#f4db9a" />
+              </svg>
+              <div><strong>张圣君文化</strong><small>ZHANG SHENGJUN</small></div>
+            </div>
+            <div class="test paper">
+              <svg viewBox="0 0 200 200" aria-hidden="true">
+                <path d="m100 18 15 35-15 18-15-18Zm55 25-5 37-22 8-7-22Zm25 52-25 28-23-3 1-23Zm-20 59-37-5-9-22 22-8Zm-61 28-29-25 3-23 23 1Zm-59-21 5-37 22-9 8 22ZM18 101l25-29 23 3-1 23Zm22-60 37 5 9 22-22 8Z" fill="#071710" />
+                <circle cx="100" cy="101" r="43" fill="#ece4d4" />
+                <path d="m100 63-15 30h11v42h8V93h11Z" fill="#071710" />
+              </svg>
+              <div><strong>单色印记</strong><small>ONE-COLOR TEST</small></div>
+            </div>
+            <div class="scale"><strong>48</strong><span class="scale-label">Pixel test</span></div>
+          </div>
+          <p class="note">五组雷楔围绕法剑与法索弧线，像印记也像旋转中的雷轮。几何性最强，适合 App 图标、商城商品钢印与动态图形系统。</p>
+        </article>
+
+        <article class="concept">
+          <div class="concept-head">
+            <div>
+              <p class="direction">Direction 04</p>
+              <h2>剑发</h2>
+              <p class="traits">Flowing Hair · Blade · Barefoot Motion</p>
+            </div>
+          </div>
+          <div class="stage">
+            <svg class="symbol" viewBox="0 0 200 200" role="img" aria-label="剑发抽象标志">
+              <path d="M82 31C43 43 34 72 55 94c-25 16-27 48-3 68M118 31c39 12 48 41 27 63 25 16 27 48 3 68" fill="none" stroke="#e0bb70" stroke-width="12" stroke-linecap="round" />
+              <path d="M75 48c-23 19-19 43 1 54-18 17-15 37 1 51M125 48c23 19 19 43-1 54 18 17 15 37-1 51" fill="none" stroke="#9b3523" stroke-width="8" stroke-linecap="round" />
+              <path d="m100 20-17 38h12v75l5 38 5-38V58h12Z" fill="#f4db9a" />
+              <path d="M70 161c10 10 20 10 30 0m0 0c10 10 20 10 30 0" fill="none" stroke="#f4db9a" stroke-width="7" stroke-linecap="round" />
+            </svg>
+          </div>
+          <div class="tests">
+            <div class="test">
+              <svg viewBox="0 0 200 200" aria-hidden="true">
+                <path d="M82 31C43 43 34 72 55 94c-25 16-27 48-3 68M118 31c39 12 48 41 27 63 25 16 27 48 3 68M75 48c-23 19-19 43 1 54-18 17-15 37 1 51M125 48c23 19 19 43-1 54 18 17 15 37-1 51" fill="none" stroke="#e0bb70" stroke-width="10" stroke-linecap="round" />
+                <path d="m100 20-17 38h12v75l5 38 5-38V58h12Z" fill="#f4db9a" />
+              </svg>
+              <div><strong>张圣君文化</strong><small>ZHANG SHENGJUN</small></div>
+            </div>
+            <div class="test paper">
+              <svg viewBox="0 0 200 200" aria-hidden="true">
+                <path d="M82 31C43 43 34 72 55 94c-25 16-27 48-3 68M118 31c39 12 48 41 27 63 25 16 27 48 3 68M75 48c-23 19-19 43 1 54-18 17-15 37 1 51M125 48c23 19 19 43-1 54 18 17 15 37-1 51" fill="none" stroke="#071710" stroke-width="10" stroke-linecap="round" />
+                <path d="m100 20-17 38h12v75l5 38 5-38V58h12Z" fill="#071710" />
+              </svg>
+              <div><strong>单色印记</strong><small>ONE-COLOR TEST</small></div>
+            </div>
+            <div class="scale"><strong>48</strong><span class="scale-label">Pixel test</span></div>
+          </div>
+          <p class="note">披发形成左右两组流动轨迹，中轴是法剑，底部双弧暗示跣足行走。最简洁、最像文化品牌，但法索与五雷信息较弱。</p>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>
