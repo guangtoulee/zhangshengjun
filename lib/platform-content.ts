@@ -103,9 +103,9 @@ const simplified: Record<ContentSlug, Omit<ContentPage, "locale" | "htmlLang" | 
       },
     ],
     cards: [
-      { eyebrow: "出生记忆", title: "永泰月洲", text: "凡人履历与张氏族谱的地理起点。", image: sharedImages.legend },
-      { eyebrow: "血缘地与法源地", title: "永泰方壶岩", text: "生活、悟道、学法与契子信俗重叠的母殿原点。", image: "/zhangshengjun/fanghu-hero.jpg" },
-      { eyebrow: "坐化圣迹", title: "闽清金沙", text: "九龙潭传说与迎神游田延续神公的农业神格。", image: sharedImages.news },
+      { eyebrow: "人物与信仰", title: "张圣君是谁？", text: "从张锄柄到法主公，理解凡人履历与多重神格。", image: sharedImages.legend, href: "/knowledge/who-is-zhang-shengjun" },
+      { eyebrow: "血缘地与法源地", title: "方壶岩为何称母殿？", text: "生活、悟道、学法与契子信俗重叠的信仰原点。", image: "/zhangshengjun/fanghu-hero.jpg", href: "/knowledge/fanghu-rock-mother-temple" },
+      { eyebrow: "文献辨析", title: "1024还是1139？", text: "族谱与科仪文本为何留下两套张圣君纪年。", image: sharedImages.news, href: "/knowledge/birth-year-sources" },
     ],
   },
   lushan: {
@@ -150,9 +150,9 @@ const simplified: Record<ContentSlug, Omit<ContentPage, "locale" | "htmlLang" | 
       },
     ],
     cards: [
-      { eyebrow: "镇邪法器", title: "五雷法剑", text: "以旧铁包浆、窄身直刃与云头护手表达克制的威仪。", image: "/zhangshengjun/reference-bible/generated/prop-ritual-sword-sheet.jpg" },
-      { eyebrow: "法脉符号", title: "麻蛇法索", text: "麻纤维、朱砂结与铁环构成最具辨识度的器物语言。", image: "/zhangshengjun/reference-bible/generated/prop-dharma-rope-sheet.jpg" },
-      { eyebrow: "视觉研究", title: "武身衣冠", text: "以生活痕迹和闽地材料建立可信的神公形象。", image: "/zhangshengjun/reference-bible/generated/costume-ornament-sheet.jpg" },
+      { eyebrow: "法脉辨析", title: "亦道亦佛的双轮法脉", text: "理解闾山、五雷法与瑜伽教法的地方交融。", image: "/zhangshengjun/reference-bible/generated/prop-ritual-sword-sheet.jpg", href: "/knowledge/lushan-double-tradition" },
+      { eyebrow: "法脉符号", title: "麻蛇法索", text: "麻纤维、朱砂结与铁环构成最具辨识度的器物语言。", image: "/zhangshengjun/reference-bible/generated/prop-dharma-rope-sheet.jpg", href: "/knowledge/zhang-shengjun-iconography" },
+      { eyebrow: "造像研究", title: "黑面披发的法相密码", text: "从黑面、额包、跣足、法剑和麻蛇理解神迹记忆。", image: "/zhangshengjun/reference-bible/generated/costume-ornament-sheet.jpg", href: "/knowledge/zhang-shengjun-iconography" },
     ],
   },
   news: {
@@ -190,8 +190,8 @@ const simplified: Record<ContentSlug, Omit<ContentPage, "locale" | "htmlLang" | 
       },
     ],
     cards: [
-      { eyebrow: "景观研究", title: "山川即是圣殿", text: "从仙桃坪到法索石，辨识神迹如何嵌入真实地貌。", image: "/zhangshengjun/reference-bible/generated/material-fanghu-lacquer-rock-sheet.jpg" },
-      { eyebrow: "活态非遗", title: "游田的农业逻辑", text: "仪式时间、巡行路线与乡村协作共同构成活态传承。", image: sharedImages.news },
+      { eyebrow: "圣地与祖庭", title: "山川如何成为圣殿", text: "从仙桃坪到雷洞，理解神迹如何嵌入真实地貌。", image: "/zhangshengjun/reference-bible/generated/material-fanghu-lacquer-rock-sheet.jpg", href: "/knowledge/fanghu-rock-mother-temple" },
+      { eyebrow: "活态非遗", title: "迎神游田是什么？", text: "仪式时间、巡行路线与乡村协作共同构成活态传承。", image: sharedImages.news, href: "/knowledge/youtian-field-procession" },
       { eyebrow: "开放征集", title: "寻找地方记忆", text: "欢迎提供老照片、庙志、科仪抄本与进香记录的线索。", image: "/zhangshengjun/fanghu-hero.jpg", href: "mailto:info@zhangshengjun.org" },
     ],
   },

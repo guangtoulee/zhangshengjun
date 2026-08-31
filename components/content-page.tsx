@@ -187,9 +187,15 @@ function ContentCardView({
   );
 
   if (card.href) {
-    const external = card.href.startsWith("mailto:");
+    if (card.href.startsWith("/")) {
+      return (
+        <Link className={styles.card} href={card.href} lang={localeInfo[locale].htmlLang}>
+          {inner}
+        </Link>
+      );
+    }
     return (
-      <a className={styles.card} href={card.href} lang={localeInfo[locale].htmlLang} rel={external ? undefined : "noreferrer"}>
+      <a className={styles.card} href={card.href} lang={localeInfo[locale].htmlLang}>
         {inner}
       </a>
     );
@@ -349,6 +355,7 @@ export default function ContentPage({ page }: { page: ContentPageData }) {
           <Mail size={17} aria-hidden="true" />
           {copy.contact}
         </a>
+        {page.locale === "zh-cn" ? <Link href="/knowledge">张圣君知识文库</Link> : null}
         <p>© 2026 · zhangshengjun.org</p>
       </footer>
 

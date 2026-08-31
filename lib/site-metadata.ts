@@ -3,7 +3,7 @@ import type { SiteLocale } from "@/content/zhangshengjun-i18n";
 import type { ContentPage } from "@/lib/platform-content";
 
 export const SITE_URL = "https://www.zhangshengjun.org";
-export const SITE_UPDATED_AT = new Date("2026-07-30T00:00:00+08:00");
+export const SITE_UPDATED_AT = new Date("2026-08-31T00:00:00+08:00");
 
 export const metadataByLocale: Record<
   SiteLocale,
