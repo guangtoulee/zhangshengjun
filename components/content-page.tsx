@@ -310,8 +310,24 @@ export default function ContentPage({ page }: { page: ContentPageData }) {
 
       <section className={styles.cardsBand}>
         <div className={styles.bandHeading}>
-          <span>{page.slug === "shop" ? "IN DEVELOPMENT" : "CURATED INDEX"}</span>
-          <h2>{page.slug === "shop" ? copy.preparing : copy.related}</h2>
+          <span>
+            {page.slug === "shop"
+              ? "IN DEVELOPMENT"
+              : page.slug === "news"
+                ? "FANGHU NEWSROOM"
+                : "CURATED INDEX"}
+          </span>
+          <h2>
+            {page.slug === "shop"
+              ? copy.preparing
+              : page.slug === "news"
+                ? page.locale === "en"
+                  ? "Fanghu updates and public coverage"
+                  : page.locale === "zh-hant"
+                    ? "方壺動態與公開報道"
+                    : "方壶动态与公开报道"
+                : copy.related}
+          </h2>
         </div>
         <div className={styles.cards}>
           {page.cards.map((card, index) => (

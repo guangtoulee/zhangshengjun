@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import {
   useEffect,
   useMemo,
@@ -695,6 +696,7 @@ export default function ZhangShengJunExperience({ locale = "zh-cn" }: { locale?:
               {item.label}
             </a>
           ))}
+          {locale === "zh-cn" ? <Link href="/knowledge">知识文库</Link> : null}
         </nav>
 
         <div className={styles.headerTools}>
@@ -729,6 +731,12 @@ export default function ZhangShengJunExperience({ locale = "zh-cn" }: { locale?:
                 <ArrowRight size={16} aria-hidden="true" />
               </a>
             ))}
+            {locale === "zh-cn" ? (
+              <Link href="/knowledge" onClick={closeMobileMenu}>
+                知识文库
+                <ArrowRight size={16} aria-hidden="true" />
+              </Link>
+            ) : null}
             <nav className={styles.mobileLocaleSwitcher} aria-label={t("语言版本")}>
               {siteLocales.map((siteLocale) => (
                 <a
@@ -1417,6 +1425,12 @@ export default function ZhangShengJunExperience({ locale = "zh-cn" }: { locale?:
               <p>
                 {t("文库将区分古籍原文、地方志、科仪抄本、田野记录与当代研究，并明确标示生卒年、封号等材料差异。")}
               </p>
+              {locale === "zh-cn" ? (
+                <Link href="/knowledge">
+                  进入知识文库
+                  <ArrowRight size={17} aria-hidden="true" />
+                </Link>
+              ) : null}
               <a href="mailto:info@zhangshengjun.org">
                 {t("提交史料线索")}
                 <ArrowRight size={17} aria-hidden="true" />
@@ -1542,6 +1556,7 @@ export default function ZhangShengJunExperience({ locale = "zh-cn" }: { locale?:
           {navItems.map((item) => (
             <a key={item.href} href={item.href}>{item.label}</a>
           ))}
+          {locale === "zh-cn" ? <Link href="/knowledge">知识文库</Link> : null}
         </nav>
         <p className={styles.footerLegal}>
           © {new Date().getFullYear()} {t("永泰方壶岩张圣君母殿管理委员会 / 福建张圣君信仰文化研究会")}

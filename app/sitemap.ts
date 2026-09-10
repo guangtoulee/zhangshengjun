@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { contentSlugs } from "@/lib/platform-content";
 import { knowledgeSlugs } from "@/lib/knowledge-content";
+import { newsArticles, newsSlugs } from "@/lib/news-content";
 import { SITE_UPDATED_AT, SITE_URL } from "@/lib/site-metadata";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -80,17 +81,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const knowledgeEntries: MetadataRoute.Sitemap = [
     {
       url: `${SITE_URL}/knowledge`,
-      lastModified: new Date("2026-08-31T00:00:00+08:00"),
+      lastModified: SITE_UPDATED_AT,
       changeFrequency: "monthly",
       priority: 0.85,
     },
     ...knowledgeSlugs.map((slug) => ({
       url: `${SITE_URL}/knowledge/${slug}`,
-      lastModified: new Date("2026-08-31T00:00:00+08:00"),
+      lastModified: SITE_UPDATED_AT,
       changeFrequency: "monthly" as const,
       priority: 0.8,
     })),
   ];
 
-  return [...homeEntries, ...contentEntries, ...knowledgeEntries];
+  const newsEntries: MetadataRoute.Sitemap = newsSlugs.map((slug) => ({
+    url: `${SITE_URL}/news/${slug}`,
+    lastModified: SITE_UPDATED_AT,
+    changeFrequency: "yearly" as const,
+    priority: 0.78,
+    images: [`${SITE_URL}${newsArticles[slug].heroImage}`],
+  }));
+
+  return [...homeEntries, ...contentEntries, ...knowledgeEntries, ...newsEntries];
 }

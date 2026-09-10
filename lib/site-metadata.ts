@@ -3,7 +3,7 @@ import type { SiteLocale } from "@/content/zhangshengjun-i18n";
 import type { ContentPage } from "@/lib/platform-content";
 
 export const SITE_URL = "https://www.zhangshengjun.org";
-export const SITE_UPDATED_AT = new Date("2026-08-31T00:00:00+08:00");
+export const SITE_UPDATED_AT = new Date("2026-09-10T00:00:00+08:00");
 
 export const metadataByLocale: Record<
   SiteLocale,
@@ -178,6 +178,23 @@ export function createWebsiteJsonLd(locale: SiteLocale) {
   };
 }
 
+export function createZhangShengjunJsonLd() {
+  const url = `${SITE_URL}/knowledge/who-is-zhang-shengjun`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "@id": `${SITE_URL}/#zhang-shengjun`,
+    name: "张圣君",
+    alternateName: ["张慈观", "张真君", "张圣真君", "张公法主", "法主公", "Lord Zhang", "Fazhu Gong"],
+    url,
+    image: absoluteUrl("/zhangshengjun/dharma-iconography.jpg"),
+    description:
+      "张圣君是闽台民间信仰中的法主公，传说由闽中山野的凡人樵夫修道济世，后成为兼具护境、农业、医药与法术传承职能的神祇。",
+    mainEntityOfPage: { "@id": `${url}#article` },
+    sameAs: ["https://zh.wikipedia.org/wiki/%E5%BC%B5%E7%9C%9F%E5%90%9B"],
+  };
+}
+
 export function createContentJsonLd(page: ContentPage) {
   const path = page.locale === "zh-cn" ? `/${page.slug}` : `/${page.locale}/${page.slug}`;
   const url = absoluteUrl(path);
@@ -191,8 +208,9 @@ export function createContentJsonLd(page: ContentPage) {
       name: page.title,
       description: page.description,
       inLanguage: page.htmlLang,
-      dateModified: "2026-07-30",
+      dateModified: SITE_UPDATED_AT.toISOString(),
       isPartOf: { "@id": `${SITE_URL}/#website` },
+      about: { "@id": `${SITE_URL}/#zhang-shengjun` },
       primaryImageOfPage: {
         "@type": "ImageObject",
         url: absoluteUrl(page.heroImage),

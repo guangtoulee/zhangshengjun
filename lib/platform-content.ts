@@ -190,9 +190,12 @@ const simplified: Record<ContentSlug, Omit<ContentPage, "locale" | "htmlLang" | 
       },
     ],
     cards: [
-      { eyebrow: "圣地与祖庭", title: "山川如何成为圣殿", text: "从仙桃坪到雷洞，理解神迹如何嵌入真实地貌。", image: "/zhangshengjun/reference-bible/generated/material-fanghu-lacquer-rock-sheet.jpg", href: "/knowledge/fanghu-rock-mother-temple" },
-      { eyebrow: "活态非遗", title: "迎神游田是什么？", text: "仪式时间、巡行路线与乡村协作共同构成活态传承。", image: sharedImages.news, href: "/knowledge/youtian-field-procession" },
-      { eyebrow: "开放征集", title: "寻找地方记忆", text: "欢迎提供老照片、庙志、科仪抄本与进香记录的线索。", image: "/zhangshengjun/fanghu-hero.jpg", href: "mailto:info@zhangshengjun.org" },
+      { eyebrow: "政策与保护 · 2026.05", title: "福建支持方壶岩整体保护与活态传承", text: "从核心宫庙、周边村落到两岸交流中心，官方答复明确后续保护方向。", image: "/zhangshengjun/fanghu-hero.jpg", href: "/news/provincial-support-living-heritage-2026" },
+      { eyebrow: "文化传承 · 2026.01", title: "信俗标准化与文旅品牌保护调研走进方壶岩", text: "围绕祭典、文化体验和核心文化标识，探索两岸交流与品牌保护路径。", image: "/zhangshengjun/reference-bible/anchors/anchor-waterfall-temple.jpg", href: "/news/fanghu-brand-standardization-2026" },
+      { eyebrow: "媒体聚焦 · 2025.04", title: "香火同源，福佑两岸", text: "《福州晚报》走进方壶岩，记录八百余年山寺、母殿圣迹与跨海香路。", image: "/zhangshengjun/mythic-lacquer-hero-v3.jpg", href: "/news/fanghu-cross-strait-feature-2025" },
+      { eyebrow: "两岸交流 · 2024.12", title: "方壶岩入选台胞寻根示范点", text: "方壶岩张圣君母殿进入福州第二批台胞寻根示范点名单。", image: sharedImages.news, href: "/news/taiwan-youth-root-seeking-2024" },
+      { eyebrow: "活动回顾 · 2024.08", title: "闽台张圣君信俗文化交流活动在方壶岩举行", text: "两岸嘉宾、宫庙代表和学者齐聚圣君故里，共同见证千年文化交流。", image: "/zhangshengjun/reference-bible/anchors/anchor-field-palanquin.jpg", href: "/news/millennium-exchange-2024" },
+      { eyebrow: "背景阅读", title: "迎神游田是什么？", text: "从仪式时间、巡行路线与乡村协作理解张圣君农业神信俗。", image: "/zhangshengjun/ritual-procession.jpg", href: "/knowledge/youtian-field-procession" },
     ],
   },
   videos: {

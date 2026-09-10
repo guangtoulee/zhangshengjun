@@ -1,7 +1,12 @@
 import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { createOrganizationJsonLd, createWebsiteJsonLd, SITE_URL } from "@/lib/site-metadata";
+import {
+  createOrganizationJsonLd,
+  createWebsiteJsonLd,
+  createZhangShengjunJsonLd,
+  SITE_URL,
+} from "@/lib/site-metadata";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -21,6 +26,9 @@ export const metadata: Metadata = {
       "max-video-preview": -1,
     },
   },
+  alternates: {
+    types: { "application/rss+xml": `${SITE_URL}/feed.xml` },
+  },
 };
 
 export const viewport: Viewport = {
@@ -38,6 +46,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             __html: JSON.stringify([
               createOrganizationJsonLd("zh-cn"),
               createWebsiteJsonLd("zh-cn"),
+              createZhangShengjunJsonLd(),
             ]).replace(/</g, "\\u003c"),
           }}
         />

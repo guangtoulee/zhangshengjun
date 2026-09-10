@@ -2969,6 +2969,10 @@
   text-decoration: none;
 }
 
+.archiveIntro a + a {
+  margin-left: 1.1rem;
+}
+
 .archiveList {
   border-top: 1px solid rgba(53, 24, 20, 0.2);
 }
